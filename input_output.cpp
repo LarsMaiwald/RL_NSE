@@ -5,7 +5,7 @@
 using namespace std;
 using namespace libconfig;
 
-int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition)
+int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition, int *Re, float *tau)
 {   
     Config cfg;
 
@@ -34,6 +34,8 @@ int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition)
         *i_max = cfg. lookup("i_max");
         *j_max = cfg. lookup("j_max");
         *boundary_condition = cfg. lookup("boundary_condition");
+        *Re = cfg.lookup("Re");
+        *tau = cfg.lookup("tau");
     }
     catch(const SettingNotFoundException &nfex)
     {
