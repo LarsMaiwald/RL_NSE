@@ -16,13 +16,13 @@ int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition,
     }
     catch(const FileIOException &fioex)
     {
-        std::cerr << "I/O error while reading file." << std::endl;
+        std::cerr << "I/O error while reading file." << "\n";
         return(EXIT_FAILURE);
     }
     catch(const ParseException &pex)
     {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
-                  << " - " << pex.getError() << std::endl;
+                  << " - " << pex.getError() << "\n";
         return(EXIT_FAILURE);
     }
 
@@ -39,7 +39,7 @@ int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition,
     }
     catch(const SettingNotFoundException &nfex)
     {
-        cerr << "One or more settings are missing in the configuration file." << endl;
+        cerr << "One or more settings are missing in the configuration file." << "\n";
     }
 
     return(EXIT_SUCCESS);

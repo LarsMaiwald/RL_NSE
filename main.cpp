@@ -15,19 +15,19 @@ int main()
     int a, b, i_max, j_max, boundary_condition, Re;
     float tau;
 
-    cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << endl;
+    cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
     load_config(&a, &b, &i_max, &j_max, &boundary_condition, &Re, &tau);
 
     // Testing input parameters
-    cout << "a = " << a << endl;
-    cout << "b = " << a << endl;
-    cout << "i_max = " << i_max << endl;
-    cout << "j_max = " << j_max << endl;
-    cout << "boundary_condition = " << boundary_condition << endl;
-    cout << "Re = " << Re << endl;
-    cout << "tau = " << tau << endl;
+    cout << "a = " << a << "\n";
+    cout << "b = " << a << "\n";
+    cout << "i_max = " << i_max << "\n";
+    cout << "j_max = " << j_max << "\n";
+    cout << "boundary_condition = " << boundary_condition << "\n";
+    cout << "Re = " << Re << "\n";
+    cout << "tau = " << tau << "\n";
 
     // Array initialization (shouldn't this be in "initialization.cpp"?)
     float** u = new float*[i_max];
@@ -44,7 +44,7 @@ int main()
         for (int j = 0; j < j_max; j++) {
             cout << u[i][j] << " ";
         }
-        cout << endl;
+        cout << "\n";
     }
 
     for(int i=0; i < i_max; i++)
