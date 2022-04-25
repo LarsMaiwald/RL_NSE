@@ -3,5 +3,4 @@
 
 #endif // INPUT_OUTPUT_H
 
-int test(int v1, int v2);
-double new_test(double d1);
+int load_config(int *a, int *b, int *i_max, int *j_max, int *boundary_condition);

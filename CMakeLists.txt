@@ -11,4 +11,7 @@ add_executable(RL_NSE main.cpp
                       memory_management.cpp memory_management.h
                       time_stepping.cpp time_stepping.h
                       pressure_calculation.cpp pressure_calculation.h
-                      boundary_conditions.cpp boundary_conditions.h)
+                      boundary_conditions.cpp boundary_conditions.h
+                      config.cfg)
+
+set(CMAKE_CXX_FLAGS "-lconfig++")
