@@ -29,29 +29,9 @@ int main()
     cout << "Re = " << Re << "\n";
     cout << "tau = " << tau << "\n";
 
-    // Array initialization (shouldn't this be in "initialization.cpp"?)
-    float** u = new float*[i_max];
-    for (int i = 0; i < i_max; i++) {
-        u[i] = new float[j_max];
-    }
-    for (int i = 0; i < i_max; i++) {
-        for (int j = 0; j < j_max; j++) {
-            u[i][j] = 0;
-        }
-    }
+    float ** u;
 
-    for (int i = 0; i < i_max; i++) {
-        for (int j = 0; j < j_max; j++) {
-            cout << u[i][j] << " ";
-        }
-        cout << "\n";
-    }
-
-    for(int i=0; i < i_max; i++)
-    {
-        delete [] u[i];
-    }
-    delete [] u;
-
+    u = grid(5, 5);
+    delete_grid(u, 5, 5);
     return 0;
 }
