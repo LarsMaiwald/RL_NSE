@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "Grid.h"
 #include "input_output.h"
 #include "initialization.h"
 #include "memory_management.h"
@@ -29,9 +30,7 @@ int main()
     cout << "Re = " << Re << "\n";
     cout << "tau = " << tau << "\n";
 
-    float ** u;
+    Grid u(5,5);
 
-    u = grid(5, 5);
-    delete_grid(u, 5, 5);
-    return 0;
+    cout << u.grid[0][0] << "\n";
 }

@@ -12,6 +12,7 @@ add_executable(RL_NSE main.cpp
                       time_stepping.cpp time_stepping.h
                       pressure_calculation.cpp pressure_calculation.h
                       boundary_conditions.cpp boundary_conditions.h
+                      Grid.cpp Grid.h
                       config.cfg)
 
 set(CMAKE_CXX_FLAGS "-lconfig++")
