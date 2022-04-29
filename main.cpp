@@ -32,5 +32,5 @@ int main()
 
     Grid u(5,5);
 
-    cout << u.grid[0][0] << "\n";
+    u.print();
 }

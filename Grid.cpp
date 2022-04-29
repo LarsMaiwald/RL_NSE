@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include <iostream>
 using namespace std;
 
 Grid::Grid(int i, int j)
@@ -25,4 +26,14 @@ Grid::~Grid()
       delete [] grid[i];
   }
   delete [] grid;
+}
+
+void Grid::print()
+{
+  for (int i = 0; i < i_max; i++) {
+      for (int j = 0; j < j_max; j++) {
+          cout << grid[i][j] << " ";
+      }
+      cout << "\n";
+}
 }

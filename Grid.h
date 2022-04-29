@@ -9,6 +9,7 @@ class Grid
     float ** grid;
     Grid(int i, int j);
     ~Grid();
+    void print();
 };
 
 #endif // GRID_H
