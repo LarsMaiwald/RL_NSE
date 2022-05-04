@@ -1,5 +1,15 @@
 # Research Lab: Numerical Solution of the Navier-Stokes Equations
 
+## Implementation
+Implement the algorithm in the following steps:
+- [x] Write the skeleton of the program, which allocates all needed variables and fields, and initializes the fields to zero.
+- [ ] Implement an output routine for the fields. Initialize u and v with a known function (e.g. u = cos(x) cos(y)) and test the output routine by outputting and plotting the fields.
+- [ ] Write the function that computes F and G. To do this, you must implement the derivative stencils (32) through (37). Test the derivative stencils by using them to calculate the derivative of a known function.
+- [ ] Implement the pressure calculation using the SOR method. Test this by solving an elliptic equation to which you know the analytic solution. Output your numerical solution and compare it to the analytic solution. Test the method, its convergence and convergence speed for different grid resolutions and relaxation parameters ω.
+- [ ] Implement a function to compute the RHS of (41).
+- [ ] Lastly, write the time evolution loop. For this, you need a function to set the time step according to the stability criterion. Be careful to potentially absorb a division by zero. You also need to implement the function which computes the new velocity from the new values of F and G and from the new pressure values.
+
+## Algorithm
 The following lists all necessary steps for solving the Navier-Stokes equations in the correct order:
 - [x] Read in parameters and initialize all variables.
 - [ ] Allocate memory for all fields and initialize all fields.
@@ -14,3 +24,6 @@ The following lists all necessary steps for solving the Navier-Stokes equations 
   - [ ] If the norm of the residual is small enough, stop the iteration.
 - [ ] Compute the new velocity components u(n+1) and v(n+1) according to (21) and (22).
 - [ ] Output the relevant fields.
+
+## Questions
+- [ ] Which are the lowest and highest value for the indices i and j of u and v?
