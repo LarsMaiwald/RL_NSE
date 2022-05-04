@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Grid.h"
 using namespace std;
 
 //No-Slip condition applied to two Grid type objects
