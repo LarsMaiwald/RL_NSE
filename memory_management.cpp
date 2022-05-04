@@ -13,13 +13,6 @@ float ** grid(int i_max, int j_max)
           u[i][j] = 0;
       }
   }
-  // Initialization
-  for (int i = 0; i < i_max; i++) {
-      for (int j = 0; j < j_max; j++) {
-          cout << u[i][j] << " ";
-      }
-      cout << "\n";
-  }
   return u;
 }
 
