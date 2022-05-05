@@ -5,7 +5,7 @@
 using namespace std;
 using namespace libconfig;
 
-int load_config(float *a, float *b, int *i_max, int *j_max, int *boundary_condition, float *u_in, float *v_in, float *Re, float *tau, float *g_x, float *g_y)
+int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y)
 {   
     Config cfg;
 
@@ -29,17 +29,17 @@ int load_config(float *a, float *b, int *i_max, int *j_max, int *boundary_condit
     // Getting parameters from file
     try
     {
-        *a = cfg.lookup("a");
-        *b = cfg. lookup("b");
-        *i_max = cfg. lookup("i_max");
-        *j_max = cfg. lookup("j_max");
-        *boundary_condition = cfg. lookup("boundary_condition");
-        *u_in = cfg.lookup("u_in");
-        *v_in = cfg.lookup("v_in");
-        *Re = cfg.lookup("Re");
-        *tau = cfg.lookup("tau");
-        *g_x = cfg.lookup("g_x");
-        *g_y = cfg.lookup("g_y");
+        a = cfg.lookup("a");
+        b = cfg. lookup("b");
+        i_max = cfg. lookup("i_max");
+        j_max = cfg. lookup("j_max");
+        boundary_condition = cfg. lookup("boundary_condition");
+        u_in = cfg.lookup("u_in");
+        v_in = cfg.lookup("v_in");
+        Re = cfg.lookup("Re");
+        tau = cfg.lookup("tau");
+        g_x = cfg.lookup("g_x");
+        g_y = cfg.lookup("g_y");
     }
     catch(const SettingNotFoundException &nfex)
     {

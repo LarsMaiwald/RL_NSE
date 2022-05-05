@@ -19,7 +19,7 @@ int main()
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(&a, &b, &i_max, &j_max, &boundary_condition, &u_in, &v_in, &Re, &tau, &g_x, &g_y);
+    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y);
 
     // Testing input parameters
     cout << "a = " << a << "\n";
@@ -36,6 +36,7 @@ int main()
 
     Grid u(i_max, j_max);
     u.print();
-//    grid_init(u, a, b); // Crashes! There seems to be a problem with the destructor
-//    u.print();
+    cout << "\n";
+    grid_init(u, a, b); // Crashes! There seems to be a problem with the destructor
+    u.print();
 }

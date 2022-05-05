@@ -4,7 +4,7 @@
 using namespace std;
 
 // Initialization of grid (a x b) values with predefined example function
-void grid_init(Grid u, int a, int b)
+void grid_init(Grid &u, int a, int b)
 {
     for (int i = 0; i < u.i_max + 2; i++) {
         for (int j = 0; j < u.j_max + 2; j++) {
