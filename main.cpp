@@ -13,8 +13,8 @@ using namespace std;
 int main()
 {
     // Initialization (shouldn't this be in "initialization.cpp"?)
-    int a, b, i_max, j_max, boundary_condition, Re;
-    float tau, g_x, g_y, u_in, v_in;
+    int i_max, j_max, boundary_condition;
+    float a, b, Re, tau, g_x, g_y, u_in, v_in;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
