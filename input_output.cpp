@@ -2,9 +2,14 @@
 #include <iomanip>
 #include <cstdlib>
 #include <libconfig.h++>
+#include <fstream>
+#include <string>
+#include "Grid.h"
 using namespace std;
 using namespace libconfig;
 
+
+// Loading parameter file using libconfig
 int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y)
 {   
     Config cfg;
@@ -47,4 +52,27 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
     }
 
     return(EXIT_SUCCESS);
+}
+
+// Writing grid to file
+void grid2file(Grid &u, string filename)
+{
+    ofstream file (filename);
+    if (file.is_open())
+    {
+        for (int i = 0; i < u.i_max + u.i_g; i++) {
+            for (int j = 0; j < u.j_max + u.j_g; j++) {
+                file << u.grid[i][j];
+                if (j < u.j_max + u.j_g - 1)
+                {
+                     file << ",";
+                }
+            }
+            file << "\n";
+        }
+        file.close();
+    }
+    else cout << "Unable to open file";
+    // to import the generated file in python use:
+    // csv = np.genfromtxt ('u.csv', delimiter=",")
 }

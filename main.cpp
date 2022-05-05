@@ -33,12 +33,13 @@ int main()
     cout << "tau = " << tau << "\n";
     cout << "g_x = " << g_x << "\n";
     cout << "g_y = " << g_y << "\n";
-
+    cout << "\n";
     Grid u(i_max, j_max, 1, 2);
     Grid v(i_max, j_max, 2, 1);
     Grid p(i_max, j_max, 2, 2);
     u.print();
     cout << "\n";
-    grid_init(u, a, b); // Crashes! There seems to be a problem with the destructor
+    grid_init(u, a, b);
     u.print();
+    grid2file(u, "u.csv");
 }
