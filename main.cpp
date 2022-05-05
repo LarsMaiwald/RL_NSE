@@ -34,7 +34,9 @@ int main()
     cout << "g_x = " << g_x << "\n";
     cout << "g_y = " << g_y << "\n";
 
-    Grid u(i_max, j_max);
+    Grid u(i_max, j_max, 1, 2);
+    Grid v(i_max, j_max, 2, 1);
+    Grid p(i_max, j_max, 2, 2);
     u.print();
     cout << "\n";
     grid_init(u, a, b); // Crashes! There seems to be a problem with the destructor
