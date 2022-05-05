@@ -26,4 +26,7 @@ The following lists all necessary steps for solving the Navier-Stokes equations 
 - [ ] Output the relevant fields.
 
 ## Questions
-- [ ] Which are the lowest and highest value for the indices i and j of u and v?
+- [x] Which are the lowest and highest value for the indices i and j of u and v?
+    - u: (i_max+1)x(j_max+2)
+    - v: (i_max+2)x(j_max+1)
+    - p: (i_max+2)x(j_max+2)
