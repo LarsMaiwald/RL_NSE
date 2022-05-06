@@ -3,7 +3,7 @@
 ## Implementation
 Implement the algorithm in the following steps:
 - [x] Write the skeleton of the program, which allocates all needed variables and fields, and initializes the fields to zero.
-- [ ] Implement an output routine for the fields. Initialize u and v with a known function (e.g. u = cos(x) cos(y)) and test the output routine by outputting and plotting the fields.
+- [x] Implement an output routine for the fields. Initialize u and v with a known function (e.g. u = cos(x) cos(y)) and test the output routine by outputting and plotting the fields.
 - [ ] Write the function that computes F and G. To do this, you must implement the derivative stencils (32) through (37). Test the derivative stencils by using them to calculate the derivative of a known function.
 - [ ] Implement the pressure calculation using the SOR method. Test this by solving an elliptic equation to which you know the analytic solution. Output your numerical solution and compare it to the analytic solution. Test the method, its convergence and convergence speed for different grid resolutions and relaxation parameters ω.
 - [ ] Implement a function to compute the RHS of (41).
