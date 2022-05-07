@@ -41,7 +41,9 @@ int main()
     cout << "\n";
     grid_init(u, a, b);
     grid_init(v, a, b);
+    grid_init(p, a, b);
     u.print();
     grid2file(u, "../RL_NSE/u.csv");
     grid2file(v, "../RL_NSE/v.csv");
+    grid2file(p, "../RL_NSE/p.csv");
 }

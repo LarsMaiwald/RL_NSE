@@ -21,6 +21,7 @@ j_max = cfg.j_max
 # loading arrays
 u = np.genfromtxt ('../RL_NSE/u.csv', delimiter=",")
 v = np.genfromtxt ('../RL_NSE/v.csv', delimiter=",")
+p = np.genfromtxt ('../RL_NSE/p.csv', delimiter=",")
 
 # initializing the grid and adjusting stagered grid with averaging
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
@@ -30,10 +31,12 @@ for i in range(i_max):
     for j in range(j_max):
         U[i][j] = (u[i+1][j] + u[i+1][j+1])/2
         V[i][j] = (v[i][j+1] + v[i+1][j+1])/2
+P = p[1:-1, 1:-1]
 
 # plotting
 fig, ax = plt.subplots()
-ax.streamplot(X, Y, U, V)
+stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_ylim(b,0)
