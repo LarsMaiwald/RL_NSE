@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./RL_NSE
+
+python streamplot.py
