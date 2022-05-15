@@ -3,7 +3,7 @@
 using namespace std;
 
 //No-Slip condition applied to two Grid type objects
-void bc_noslip(Grid u, Grid v)
+void bc_noslip(Grid &u, Grid &v)
 {
     for (int j = 1; j < u.j_max + 1; j++)
     {
@@ -28,7 +28,7 @@ void bc_noslip(Grid u, Grid v)
 }
 
 // Outflow condition applied to two Grid type objects
-void bc_outflow(Grid u, Grid v)
+void bc_outflow(Grid &u, Grid &v)
 {
     for (int j = 1; j < u.j_max + 1; j++)
     {
@@ -47,7 +47,7 @@ void bc_outflow(Grid u, Grid v)
 }
 
 // Inflow condition applied to two Grid type objects given the inflow velocities
-void bc_inflow(Grid u, Grid v, float u_in, float v_in)
+void bc_inflow(Grid &u, Grid &v, float u_in, float v_in)
 {
     for (int j = 1; j < u.j_max + 1; j++)
     {
