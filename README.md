@@ -30,3 +30,5 @@ The following lists all necessary steps for solving the Navier-Stokes equations 
     - u: (i_max+1)x(j_max+2)
     - v: (i_max+2)x(j_max+1)
     - p: (i_max+2)x(j_max+2)
+- [ ] Aren't there ghost cells missing for u in x direction and for v in y direction?
+- [ ] Does |u_max| really mean abs(max(u))?
