@@ -25,6 +25,7 @@ float grid_max_abs(Grid &a){
     return grid_max;
 }
 
+// it should be max(abs(u))
 float time_step(Grid &u, Grid &v, float tau, float Re, float dx, float dy){
     float v1 = Re/(2*(1/(dx*dx) + 1/(dy*dy)));
     float v2 = dx/abs(grid_max(u));
