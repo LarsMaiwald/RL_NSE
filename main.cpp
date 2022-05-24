@@ -13,13 +13,13 @@ using namespace std;
 int main()
 {
     // Initialization (shouldn't this be in "initialization.cpp"?)
-    int i_max, j_max, boundary_condition;
-    float a, b, Re, tau, g_x, g_y, u_in, v_in;
+    int i_max, j_max, boundary_condition, norm;
+    float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y);
+    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm);
 
     // Testing input parameters
     cout << "a = " << a << "\n";
@@ -33,6 +33,9 @@ int main()
     cout << "tau = " << tau << "\n";
     cout << "g_x = " << g_x << "\n";
     cout << "g_y = " << g_y << "\n";
+    cout << "w = " << w << "\n";
+    cout << "eps = " << eps << "\n";
+    cout << "norm = " << norm << "\n";
     cout << "\n";
     Grid u(i_max, j_max, 1, 2);
     Grid v(i_max, j_max, 2, 1);
