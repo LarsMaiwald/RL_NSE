@@ -12,7 +12,7 @@ void pressure_deriv(Grid &p, Grid &dpdx, Grid &dpdy, float dx, float dy){
     }
 }
 
-void RHS(Grid &RHS, Grid &F, Grid &G, float dx, float dy, float dt){
+void calc_RHS(Grid &RHS, Grid &F, Grid &G, float dx, float dy, float dt){
     for(int i = int(RHS.i_g/2); i < RHS.i_max + 1; i++){ // is the range correct?
         for(int j = int(RHS.j_g/2); j < RHS.j_max + 1; j++){ // is the range correct?
             RHS.grid[i][j] = ((F.grid[i][j] - F.grid[i-1][j])/dx + (G.grid[i][j] - G.grid[i][j-1])/dy)/dt;

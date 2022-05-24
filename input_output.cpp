@@ -10,7 +10,7 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre)
+int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final)
 {   
     Config cfg;
 
@@ -49,6 +49,7 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
         eps = cfg.lookup("eps");
         norm = cfg.lookup("norm");
         pre = cfg.lookup("pre");
+        t_final = cfg.lookup("t_final");
     }
     catch(const SettingNotFoundException &nfex)
     {
