@@ -82,10 +82,12 @@ int main()
         counter += 1;
         cout << "Starting time step " << counter << "\n";
         // Choosing time step
+        cout << "Choosing time step \n";
         float dt = time_step(u, v, tau, Re, dx, dy);
         t += dt;
 
         // Filling ghost cells according to boundary condition
+        cout << "Filling ghost cells according to boundary condition \n";
         if(boundary_condition == 0){
             bc_noslip(u, v);
         }
@@ -97,32 +99,39 @@ int main()
         }
 
         // Computing F and G
+        cout << "Computing gamma \n";
         float gamma = get_gamma(u, v, dx, dy, dt, pre);
+        cout << "Computing derivative stencils \n";
         derivative_stencils(u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dx, dy, gamma);
+        cout << "Computing F and G \n";
         F_and_G(F, G, u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dt, Re, g_x, g_y);
 
         // Calculate RHS of pressure eq.
+        cout << "Calculating RHS of pressure eq. \n";
         calc_RHS(RHS, F, G, dx, dy, dt);
 
         // SOR iteration loop
+        cout << "SOR iteration loop \n";
         bool check = false;
+        for(int i = 0; i < p.i_max + p.i_g; i++){
+            for(int j = 0; j < p.j_max + p.j_g; j++){
+                p_init.grid[i][j] = p.grid[i][j];
+            }
+        }
         while(!check){
             set_pressure_boundaries(p, p_new);
-            for(int i = 0; i < p.i_max + p.i_g; i++){
-                for(int j = 0; j < p.j_max + p.j_g; j++){
-                    p_init.grid[i][j] = p.grid[i][j];
-                }
-            }
             pressure(p, p_new, RHS, dx, dy, w);
             residual(r, p, RHS, dx, dy);
-            check = tolerance_check(p, p_init, eps, norm);
+            check = tolerance_check(r, p_init, eps, norm);
         }
 
         // Compute the new velocity components u and v
+        cout << "Compute the new velocity components u and v \n";
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
     }
 
     // Output
+    cout << "Outputting grids \n";
     grid2file(u, "../RL_NSE/u.csv");
     grid2file(v, "../RL_NSE/v.csv");
     grid2file(p, "../RL_NSE/p.csv");

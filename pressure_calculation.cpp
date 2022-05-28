@@ -61,13 +61,17 @@ float max_norm(Grid &r){
     return max_norm;
 }
 
-bool tolerance_check(Grid &p, Grid &p_init, float eps, int norm){
+bool tolerance_check(Grid &r, Grid &p_init, float eps, int norm){
     bool check = false;
     if(norm == 0){ // max_norm
-        check = (max_norm(p) < eps*max_norm(p_init));
+        cout << "max_norm(r) = " << max_norm(r) << "\n";
+//        cout << "eps*max_norm(p_init) = " << eps*max_norm(p_init) << "\n";
+        check = (max_norm(r) < eps*max_norm(p_init));
     }
     else if(norm == 1){ // L2_norm
-        check = (L2_norm(p) < eps*L2_norm(p_init));
+        cout << "L2_norm(r)= " << L2_norm(r) << "\n";
+//        cout << "eps*L2_norm(p_init) = " << eps*L2_norm(p_init) << "\n";
+        check = (L2_norm(r) < eps*L2_norm(p_init));
     }
     return check;
 }
