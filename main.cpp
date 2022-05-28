@@ -80,7 +80,7 @@ int main()
     float dy = b/j_max; // is this correct?
     while(t < t_final){
         counter += 1;
-        cout << "Starting time step" << counter << "\n";
+        cout << "Starting time step " << counter << "\n";
         // Choosing time step
         float dt = time_step(u, v, tau, Re, dx, dy);
         t += dt;
