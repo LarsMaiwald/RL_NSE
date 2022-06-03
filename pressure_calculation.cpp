@@ -24,6 +24,10 @@ void pressure(Grid &p, Grid &p_new, Grid &RHS, float dx, float dy, float w){
     for(int i = 1; i < p.i_max + 1; i++){ // is the range correct?
         for(int j = 1; j < p.j_max + 1; j++){ // is the range correct?
             p_new.grid[i][j] = (1 - w)*p.grid[i][j] + (w/(2*(1/(dx*dx) + 1/(dy*dy))))*((p.grid[i+1][j] + p_new.grid[i-1][j])/(dx*dx) + (p.grid[i][j+1] + p_new.grid[i][j-1])/(dy*dy) - RHS.grid[i][j]);
+        }
+    }
+    for(int i = 0; i < p.i_max + p.i_g; i++){ // is the range correct?
+        for(int j = 0; j < p.j_max + p.j_g; j++){ // is the range correct?
             p.grid[i][j] = p_new.grid[i][j];
         }
     }
@@ -63,12 +67,12 @@ float max_norm(Grid &r){
 bool tolerance_check(Grid &r, Grid &p_init, float eps, int norm, float chi){
     bool check = false;
     if(norm == 0){ // max_norm
-        cout << "max_norm(r) = " << max_norm(r) << "\n";
+//        cout << "max_norm(r) = " << max_norm(r) << "\n";
 //        cout << "eps*max_norm(p_init) = " << eps*max_norm(p_init) << "\n";
         check = (max_norm(r) < eps*max_norm(p_init) + chi);
     }
     else if(norm == 1){ // L2_norm
-        cout << "L2_norm(r)= " << L2_norm(r) << "\n";
+//        cout << "L2_norm(r)= " << L2_norm(r) << "\n";
 //        cout << "eps*L2_norm(p_init) = " << eps*L2_norm(p_init) << "\n";
         check = (L2_norm(r) < eps*L2_norm(p_init) + chi);
     }
