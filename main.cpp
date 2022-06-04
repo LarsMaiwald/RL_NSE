@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 #include "Grid.h"
 #include "input_output.h"
 #include "initialization.h"
@@ -12,7 +13,7 @@ using namespace std;
 
 int main()
 {
-    // Initialization (shouldn't this be in "initialization.cpp"?)
+    // Initialization
     int i_max, j_max, boundary_condition, norm;
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi;
 
@@ -52,6 +53,9 @@ int main()
 //    grid2file(u, "../RL_NSE/u.csv");
 //    grid2file(v, "../RL_NSE/v.csv");
 //    grid2file(p, "../RL_NSE/p.csv");
+
+    // Cleaning output directory
+    system("rm ../RL_NSE/outputs/*");
 
     // Creating all grids
     Grid p(i_max, j_max, 2, 2);
@@ -129,11 +133,16 @@ int main()
         // Compute the new velocity components u and v
 //        cout << "Compute the new velocity components u and v \n";
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
+
+        // Output
+        grid2file(u, "../RL_NSE/outputs/u" + to_string(counter) + ".csv");
+        grid2file(v, "../RL_NSE/outputs/v" + to_string(counter) + ".csv");
+        grid2file(p, "../RL_NSE/outputs/p" + to_string(counter) + ".csv");
     }
 
-    // Output
+    // Final output
 //    cout << "Outputting grids \n";
-    grid2file(u, "../RL_NSE/u.csv");
-    grid2file(v, "../RL_NSE/v.csv");
-    grid2file(p, "../RL_NSE/p.csv");
+    grid2file(u, "../RL_NSE/outputs/u_final.csv");
+    grid2file(v, "../RL_NSE/outputs/v_final.csv");
+    grid2file(p, "../RL_NSE/outputs/p_final.csv");
 }

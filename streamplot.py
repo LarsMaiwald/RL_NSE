@@ -19,9 +19,9 @@ i_max = cfg.i_max
 j_max = cfg.j_max
 
 # loading arrays
-u = np.genfromtxt ('../RL_NSE/u.csv', delimiter=",")
-v = np.genfromtxt ('../RL_NSE/v.csv', delimiter=",")
-p = np.genfromtxt ('../RL_NSE/p.csv', delimiter=",")
+u = np.genfromtxt ('../RL_NSE/outputs/u_final.csv', delimiter=",")
+v = np.genfromtxt ('../RL_NSE/outputs/v_final.csv', delimiter=",")
+p = np.genfromtxt ('../RL_NSE/outputs/p_final.csv', delimiter=",")
 
 # initializing the grid and adjusting stagered grid with averaging
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
