@@ -71,3 +71,11 @@ void bc_inflow(Grid &u, Grid &v, float u_in, float v_in)
       u.grid[i][v.j_max+1] = u_in - u.grid[i][v.j_max];
     }
 }
+
+void bc_upper(Grid &u, float u_in)
+{
+    for (int i = 1; i < u.i_max + 1; i++)
+    {
+      u.grid[i][0] = 2*u_in - u.grid[i][1];
+    }
+}
