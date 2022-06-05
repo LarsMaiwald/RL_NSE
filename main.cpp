@@ -103,6 +103,9 @@ int main()
             bc_inflow(u, v, u_in, v_in);
         }
 
+        // Additional boundary condition
+        bc_upper(u, u_in);
+
         // Computing F and G
 //        cout << "Computing gamma \n";
         float gamma = get_gamma(u, v, dx, dy, dt, pre);
@@ -123,11 +126,21 @@ int main()
                 p_init.grid[i][j] = p.grid[i][j];
             }
         }
+        int k = 0;
         while(!check){
+            k += 1;
+            if(k == 1000000000/i_max/j_max){
+                cout << "SOR did not converge in given number of steps. \n";
+                break;
+            }
             set_pressure_boundaries(p, p_new);
             pressure(p, p_new, RHS, dx, dy, w);
             residual(r, p, RHS, dx, dy);
             check = tolerance_check(r, p_init, eps, norm, chi);
+        }
+        if(k == 1000000000/i_max/j_max){
+            cout << "Stopping simulation. \n";
+            break;
         }
 
         // Compute the new velocity components u and v

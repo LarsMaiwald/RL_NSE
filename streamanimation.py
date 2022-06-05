@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.collections import LineCollection
-from matplotlib.patches import Rectangle
 from load_cfg import load_cfg
 import os
 
@@ -50,10 +49,14 @@ U, V, P = load_and_adjust(1, U, V, P)
 
 # plotting
 fig, ax = plt.subplots()
-stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+try:
+    stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+except:
+    stream = ax.streamplot(X, Y, U, V, color='grey', density=2)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
+ax.set_xlim(0,a)
 ax.set_ylim(b,0)
 ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
@@ -70,7 +73,10 @@ def animation_frame(frame, X, Y, U, V, P):
             artist.remove()
     # update frame
     U, V, P = load_and_adjust(frame, U, V, P)
-    stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+    try:
+        stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+    except:
+        stream = ax.streamplot(X, Y, U, V, color='grey', density=2)
     cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
     return stream, cbar
 
