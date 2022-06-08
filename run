@@ -4,3 +4,5 @@ make
 ./RL_NSE
 
 python streamplot.py
+
+python streamanimation.py
