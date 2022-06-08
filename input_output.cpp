@@ -10,7 +10,7 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi)
+int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step)
 {   
     Config cfg;
 
@@ -51,6 +51,7 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
         pre = cfg.lookup("pre");
         t_final = cfg.lookup("t_final");
         chi = cfg.lookup("chi");
+        save_step = cfg.lookup("save_step");
     }
     catch(const SettingNotFoundException &nfex)
     {

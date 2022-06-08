@@ -14,13 +14,13 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm;
+    int i_max, j_max, boundary_condition, norm, save_step;
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi);
+    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -40,6 +40,7 @@ int main()
 //    cout << "pre = " << pre << "\n";
 //    cout << "t_final = " << t_final << "\n";
 //    cout << "chi = " << chi << "\n";
+//    cout << "save_step = " << save_step << "\n";
 //    cout << "\n";
 //    Grid u(i_max, j_max, 1, 2);
 //    Grid v(i_max, j_max, 2, 1);
@@ -81,6 +82,7 @@ int main()
     // Time evolution loop
     float t = 0;
     int counter = 0;
+    int c = 0;
     float dx = a/i_max; // is this correct?
     float dy = b/j_max; // is this correct?
     while(t < t_final){
@@ -148,9 +150,12 @@ int main()
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
 
         // Output
-        grid2file(u, "../RL_NSE/outputs/u" + to_string(counter) + ".csv");
-        grid2file(v, "../RL_NSE/outputs/v" + to_string(counter) + ".csv");
-        grid2file(p, "../RL_NSE/outputs/p" + to_string(counter) + ".csv");
+        if(counter % save_step == 0){
+            c += 1;
+            grid2file(u, "../RL_NSE/outputs/u" + to_string(c) + ".csv");
+            grid2file(v, "../RL_NSE/outputs/v" + to_string(c) + ".csv");
+            grid2file(p, "../RL_NSE/outputs/p" + to_string(c) + ".csv");
+        }
     }
 
     // Final output
