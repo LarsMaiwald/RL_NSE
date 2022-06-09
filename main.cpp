@@ -106,7 +106,7 @@ int main()
         }
 
         // Additional boundary condition
-        bc_upper(u, u_in);
+//        bc_upper(u, u_in);
 
         // Computing F and G
 //        cout << "Computing gamma \n";

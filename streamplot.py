@@ -33,9 +33,15 @@ for i in range(i_max):
         V[i][j] = (v[i][j+1] + v[i+1][j+1])/2
 P = p[1:-1, 1:-1]
 
+speed = np.sqrt(U**2 + V**2)
+lw = 5*speed/np.max(speed)
+
 # plotting
 fig, ax = plt.subplots()
-stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+try:
+    stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
+except:
+    stream = ax.streanplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')

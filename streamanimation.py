@@ -47,12 +47,15 @@ def load_and_adjust(counter, U, V, P):
     
 U, V, P = load_and_adjust(1, U, V, P)
 
+speed = np.sqrt(U**2 + V**2)
+lw = 5*speed/np.max(speed)
+
 # plotting
 fig, ax = plt.subplots()
 try:
-    stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+    stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
 except:
-    stream = ax.streamplot(X, Y, U, V, color='grey', density=2)
+    stream = ax.streanplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
@@ -73,10 +76,12 @@ def animation_frame(frame, X, Y, U, V, P):
             artist.remove()
     # update frame
     U, V, P = load_and_adjust(frame, U, V, P)
+    speed = np.sqrt(U**2 + V**2)
+    lw = 5*speed/np.max(speed)
     try:
-        stream = ax.streamplot(X, Y, U, V, color=P, density=2)
+        stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
     except:
-        stream = ax.streamplot(X, Y, U, V, color='grey', density=2)
+        stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
     cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
     return stream, cbar
 
