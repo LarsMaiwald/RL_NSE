@@ -15,11 +15,15 @@ void grid_init(Grid &u, float x[], float y[])
 
 float xy_init(float x[], int i_max, int x_min, int x_max)
 {
-  int dx = abs(x_max-x_min);
+  cout << x_max;
+  cout << x_min;
+  int dx = abs(x_max-x_min)/i_max;
+  cout << dx << endl;
   x[0] = x_min - dx;
   for  (int i = 1; i < i_max + 2; i++)
   {
     x[i] = x[i-1]+dx;
+    //cout << x[i-1] << " - " << x[i] << endl;
   }
   return dx;
 }

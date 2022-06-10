@@ -34,11 +34,11 @@ int load_config(int i_max, int j_max, float x_min, float x_max, float y_min, flo
     // Getting parameters from file
     try
     {
-        i_max = cfg. lookup("i_max");
-        j_max = cfg. lookup("j_max");
-        x_min = cfg. lookup("x_min");
+        i_max = cfg.lookup("i_max");
+        j_max = cfg.lookup("j_max");
+        x_min = cfg.lookup("x_min");
         x_max = cfg.lookup("x_max");
-        y_min = cfg. lookup("y_min");
+        y_min = cfg.lookup("y_min");
         y_max = cfg.lookup("y_max");
     }
     catch(const SettingNotFoundException &nfex)
@@ -79,7 +79,7 @@ void array2file(float u[], int i_max, string filename)
     {
         for (int i = 0; i < i_max + 2; i++) {
           file << u[i];
-          file << ",";
+          file << "\n";
         }
         file.close();
     }

@@ -4,6 +4,7 @@
 #include <libconfig.h++>
 #include <fstream>
 #include <string>
+#include <stdlib.h>
 #include "Grid.h"
 #include "initialization.h"
 #include "derivatives.h"
@@ -40,6 +41,8 @@ int main()
     Grid dv2dy(i_max, j_max, 2, 2);
 
     load_config(i_max, j_max, x_min, x_max, y_min, y_max);
+
+    cout << i_max << ", " << x_max << endl;
 
     dx = xy_init(x, i_max, x_min, x_max);
     dy = xy_init(y, j_max, y_min, y_max);
