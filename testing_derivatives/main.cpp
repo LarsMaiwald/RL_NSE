@@ -1,9 +1,13 @@
 #include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <libconfig.h++>
+#include <fstream>
 #include <string>
-#include <stdlib.h>
 #include "Grid.h"
 #include "initialization.h"
-#include "time_stepping.h"
+#include "derivatives.h"
+#include "input_output.h"
 
 
 using namespace std;
@@ -11,32 +15,37 @@ using namespace std;
 int main()
 {
     // Initializatio
-
+    int i_max = 1000;
+    int j_max = 1000;
     // Creating all grid
-    Grid x(i_max, j_max, 2, 2);
+    float dx;
+    float dy;
+    float gamma;
+    float x[i_max];
+    float y[j_max];
     Grid u(i_max, j_max, 2, 2);
+    Grid v(i_max, j_max, 2, 2);
     Grid d2udx2(i_max, j_max, 2, 2);
     Grid d2udy2(i_max, j_max, 2, 2);
-    Grid du2dx(i_max, j_max, 1, 2);
-    Grid duvdy(i_max, j_max, 1, 2);
-    Grid v(i_max, j_max, 2, 1);
-    Grid d2vdx2(i_max, j_max, 2, 1);
-    Grid d2vdy2(i_max, j_max, 2, 1);
-    Grid duvdx(i_max, j_max, 2, 1);
-    Grid dv2dy(i_max, j_max, 2, 1);
+    Grid du2dx(i_max, j_max, 2, 2);
+    Grid duvdy(i_max, j_max, 2, 2);
+    Grid d2vdx2(i_max, j_max, 2, 2);
+    Grid d2vdy2(i_max, j_max, 2, 2);
+    Grid duvdx(i_max, j_max, 2, 2);
+    Grid dv2dy(i_max, j_max, 2, 2);
 
-    // Time evolution loop
-    float t = 0;
-    int counter = 0;
-    int c = 0;
-    float dx = a/i_max; // is this correct?
-    float dy = b/j_max; // is this correct?
+    dx = xy_init(x, i_max, -10, 10);
+    dy = xy_init(y, j_max, -5, 5);
 
-    float gamma = get_gamma(u, v, dx, dy, dt, pre);
-//        cout << "Computing derivative stencils \n";
+    grid_init(u, x, y);
+    grid_init(v, x, y);
+    gamma = get_gamma(u, v, dx, dy, 0.001, 0.1);
+
     derivative_stencils(u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dx, dy, gamma);
     // Final output
 //    cout << "Outputting grids \n";
+    array2file(x, i_max, "../testing_derivatives/outputs/x.csv");
+    array2file(y, j_max, "../testing_derivatives/outputs/y.csv");
     grid2file(u, "../testing_derivatives/outputs/u.csv");
     grid2file(d2udx2, "../testing_derivatives/outputs/d2udx2.csv");
     grid2file(d2udy2, "../testing_derivatives/outputs/d2udy2.csv");
