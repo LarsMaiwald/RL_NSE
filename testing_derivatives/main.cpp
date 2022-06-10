@@ -19,10 +19,14 @@ int main()
     // Initializatio
     int i_max;
     int j_max;
-    int x_max;
-    int x_min;
-    int y_max;
-    int y_min;
+    float x_max;
+    float x_min;
+    float y_max;
+    float y_min;
+
+    // Loading parameter file
+    load_config(i_max, j_max, x_min, x_max, y_min, y_max);
+
     // Creating all grid
     float dx;
     float dy;
@@ -42,10 +46,10 @@ int main()
 
     load_config(i_max, j_max, x_min, x_max, y_min, y_max);
 
-    cout << i_max << ", " << x_max << endl;
 
     dx = xy_init(x, i_max, x_min, x_max);
     dy = xy_init(y, j_max, y_min, y_max);
+
 
     grid_init(u, x, y);
     grid_init(v, x, y);

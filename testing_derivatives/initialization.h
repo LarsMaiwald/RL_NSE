@@ -3,6 +3,6 @@
 
 #include "Grid.h"
 void grid_init(Grid &u, float x[], float y[]);
-float xy_init(float x[], int i_max, int x_min, int x_max);
+float xy_init(float x[], int i_max, float x_min, float x_max);
 
 #endif // INITIALIZATION_H

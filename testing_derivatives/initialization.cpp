@@ -13,12 +13,9 @@ void grid_init(Grid &u, float x[], float y[])
     }
 }
 
-float xy_init(float x[], int i_max, int x_min, int x_max)
+float xy_init(float x[], int i_max, float x_min, float x_max)
 {
-  cout << x_max;
-  cout << x_min;
-  int dx = abs(x_max-x_min)/i_max;
-  cout << dx << endl;
+  float dx = abs(x_max-x_min)/i_max;
   x[0] = x_min - dx;
   for  (int i = 1; i < i_max + 2; i++)
   {
