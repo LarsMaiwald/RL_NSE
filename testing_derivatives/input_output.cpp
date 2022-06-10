@@ -10,14 +10,14 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step)
+int load_config(int i_max, int j_max, float x_min, float x_max, float y_min, float y_max)
 {
     Config cfg;
 
     // Read the file. If there is an error, report it and exit.
     try
     {
-        cfg.readFile("../RL_NSE/config.cfg");
+        cfg.readFile("../testing_derivatives/config.cfg");
     }
     catch(const FileIOException &fioex)
     {
@@ -34,24 +34,12 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
     // Getting parameters from file
     try
     {
-        a = cfg.lookup("a");
-        b = cfg. lookup("b");
         i_max = cfg. lookup("i_max");
         j_max = cfg. lookup("j_max");
-        boundary_condition = cfg. lookup("boundary_condition");
-        u_in = cfg.lookup("u_in");
-        v_in = cfg.lookup("v_in");
-        Re = cfg.lookup("Re");
-        tau = cfg.lookup("tau");
-        g_x = cfg.lookup("g_x");
-        g_y = cfg.lookup("g_y");
-        w = cfg.lookup("w");
-        eps = cfg.lookup("eps");
-        norm = cfg.lookup("norm");
-        pre = cfg.lookup("pre");
-        t_final = cfg.lookup("t_final");
-        chi = cfg.lookup("chi");
-        save_step = cfg.lookup("save_step");
+        x_min = cfg. lookup("x_min");
+        x_max = cfg.lookup("x_max");
+        y_min = cfg. lookup("y_min");
+        y_max = cfg.lookup("y_max");
     }
     catch(const SettingNotFoundException &nfex)
     {

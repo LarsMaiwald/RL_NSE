@@ -14,9 +14,14 @@ using namespace std;
 
 int main()
 {
+
     // Initializatio
-    int i_max = 1000;
-    int j_max = 1000;
+    int i_max;
+    int j_max;
+    int x_max;
+    int x_min;
+    int y_max;
+    int y_min;
     // Creating all grid
     float dx;
     float dy;
@@ -34,8 +39,10 @@ int main()
     Grid duvdx(i_max, j_max, 2, 2);
     Grid dv2dy(i_max, j_max, 2, 2);
 
-    dx = xy_init(x, i_max, -10, 10);
-    dy = xy_init(y, j_max, -5, 5);
+    load_config(i_max, j_max, x_min, x_max, y_min, y_max);
+
+    dx = xy_init(x, i_max, x_min, x_max);
+    dy = xy_init(y, j_max, y_min, y_max);
 
     grid_init(u, x, y);
     grid_init(v, x, y);
