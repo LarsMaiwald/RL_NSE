@@ -1,1 +1,8 @@
 #!/bin/bash
+rm outputs/*
+
+make
+
+./testing_derivatives
+
+python plotting.py
