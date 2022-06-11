@@ -13,6 +13,15 @@ void grid_init(Grid &u, float x[], float y[])
     }
 }
 
+void grid_init2(Grid &u, float x[], float y[])
+{
+    for (int i = 0; i < u.i_max + u.i_g; i++) {
+        for (int j = 0; j < u.j_max + u.j_g; j++) {
+            u.grid[i][j] = x[i]* x[i] * y[j] * y[j];
+        }
+    }
+}
+
 float xy_init(float x[], int i_max, float x_min, float x_max)
 {
   float dx = abs(x_max-x_min)/i_max;
