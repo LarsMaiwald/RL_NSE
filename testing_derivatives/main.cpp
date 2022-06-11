@@ -52,7 +52,7 @@ int main()
 
 
     grid_init(u, x, y);
-    grid_init(v, x, y);
+    grid_init2(v, x, y);
     gamma = get_gamma(u, v, dx, dy, 0.001, 0.1);
 
     derivative_stencils(u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dx, dy, gamma);

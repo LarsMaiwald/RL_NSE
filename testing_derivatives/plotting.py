@@ -56,13 +56,11 @@ for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr.append(temp)
 
 
-fig, ax = plt.subplots(len(numRes_Arr), 2, figsize= (15, (len(numRes_Arr)/2) * 15))
-
-
+fig, ax = plt.subplots(len(numRes_Arr), 2, figsize= (7, (len(numRes_Arr)/2) * 7))
 
 for i in range(len(numRes_Arr)):
-    ax[i][0]= plt.pcolormesh(x, y, numRes_Arr[i])
-    ax[i][1] = plt.pcolormesh(x, y, analytRes_Arr[i])
+    ax[i][0].pcolormesh(x, y, numRes_Arr[i])
+    ax[i][1].pcolormesh(x, y, analytRes_Arr[i])
 
 #for i in range(len(numRes_Arr)):
 #    for j in range(2):\
@@ -70,5 +68,6 @@ for i in range(len(numRes_Arr)):
 
 #ax[0][0].set(title = 'Numerical Solution')
 #ax[0][1].set(title = 'Analytical Solution')
-
+fig.tight_layout()
+fig.savefig('../testing_derivatives/plots/comparison.png', dpi=200)
 plt.show()
