@@ -31,8 +31,8 @@ int main()
     float dx;
     float dy;
     float gamma;
-    float x[i_max];
-    float y[j_max];
+    float x[i_max+2];
+    float y[j_max+2];
     Grid u(i_max, j_max, 2, 2);
     Grid v(i_max, j_max, 2, 2);
     Grid d2udx2(i_max, j_max, 2, 2);
