@@ -11,4 +11,4 @@ add_executable(testing_derivatives main.cpp
                       input_output.cpp input_output.h
                       initialization.cpp initialization.h)
 
-set(CMAKE_CXX_FLAGS "-lconfig++")
+target_link_libraries(testing_derivatives config++)

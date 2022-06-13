@@ -16,4 +16,4 @@ add_executable(RL_NSE main.cpp
                       config.cfg
                       README.md)
 
-set(CMAKE_CXX_FLAGS "-lconfig++")
+target_link_libraries(RL_NSE config++)
