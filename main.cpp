@@ -155,6 +155,7 @@ int main()
         // Output
         if(counter % save_step == 0){
             c += 1;
+            time2file(t, "../RL_NSE/outputs/t_final.csv");
             grid2file(u, "../RL_NSE/outputs/u" + to_string(c) + ".csv");
             grid2file(v, "../RL_NSE/outputs/v" + to_string(c) + ".csv");
             grid2file(p, "../RL_NSE/outputs/p" + to_string(c) + ".csv");

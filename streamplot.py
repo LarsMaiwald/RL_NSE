@@ -18,6 +18,8 @@ b = cfg.b
 i_max = cfg.i_max
 j_max = cfg.j_max
 
+t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
+
 # loading arrays
 u = np.genfromtxt ('../RL_NSE/outputs/u_final.csv', delimiter=",")
 v = np.genfromtxt ('../RL_NSE/outputs/v_final.csv', delimiter=",")
@@ -43,6 +45,7 @@ try:
 except:
     stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
+text = ax.text(1.0, 1.1, f'time: {t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_xlim(0,a)

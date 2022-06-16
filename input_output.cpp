@@ -79,7 +79,18 @@ void grid2file(Grid &u, string filename)
         }
         file.close();
     }
-    else cout << "Unable to open file";
+    else cout << "Unable to open file " << filename << "\n";
     // to import the generated file in python use:
     // csv = np.genfromtxt ('u.csv', delimiter=",")
+}
+
+void time2file(float t, string filename)
+{
+    ofstream file (filename, std::ios_base::app);
+    if (file.is_open())
+    {
+        file << t << "\n";
+        file.close();
+    }
+    else cout << "Unable to open file" << filename << "\n";
 }

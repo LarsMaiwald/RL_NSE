@@ -22,7 +22,9 @@ b = cfg.b
 i_max = cfg.i_max
 j_max = cfg.j_max
 
-counter_max = len(os.listdir('../RL_NSE/outputs/'))/3 - 1
+counter_max = (len(os.listdir('../RL_NSE/outputs/')) - 1)/3 - 1
+t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
+t_dec = len(str(t[-1])) - 2
 
 # initializing the grid
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
@@ -57,6 +59,7 @@ try:
 except:
     stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
+text = ax.text(0.8, 1.1, f'time: {t[0]}/{t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_xlim(0,a)
@@ -65,7 +68,7 @@ ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
 
-def animation_frame(frame, X, Y, U, V, P):
+def animation_frame(frame, X, Y, U, V, P, t):
     # Clear lines, arrowheads and colorbar
     global cbar
     cbar.remove()
@@ -83,9 +86,10 @@ def animation_frame(frame, X, Y, U, V, P):
     except:
         stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
     cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
+    text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f}/{t[-1]}')
     return stream, cbar
 
-animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=200, fargs=(X, Y, U, V, P)) # interval=2*dt*1000
+animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=200, fargs=(X, Y, U, V, P, t)) # interval=2*dt*1000
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
 plt.show()
 
