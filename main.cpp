@@ -145,6 +145,9 @@ int main()
             break;
         }
 
+        // Calculate the pressure derivatives
+        pressure_deriv(p, dpdx, dpdy, dx, dy);
+
         // Compute the new velocity components u and v
 //        cout << "Compute the new velocity components u and v \n";
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
