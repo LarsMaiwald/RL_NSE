@@ -131,7 +131,7 @@ int main()
         int k = 0;
         while(!check){
             k += 1;
-            if(k == 1000000000/i_max/j_max){
+            if(k == 10000000000/(i_max*j_max)){
                 cout << "SOR did not converge in given number of steps. \n";
                 break;
             }
@@ -140,7 +140,7 @@ int main()
             residual(r, p, RHS, dx, dy);
             check = tolerance_check(r, p_init, eps, norm, chi);
         }
-        if(k == 1000000000/i_max/j_max){
+        if(k == 10000000000/(i_max*j_max)){
             cout << "Stopping simulation. \n";
             break;
         }

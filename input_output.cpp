@@ -67,10 +67,10 @@ void grid2file(Grid &u, string filename)
     ofstream file (filename);
     if (file.is_open())
     {
-        for (int i = 0; i < u.i_max + u.i_g; i++) {
-            for (int j = 0; j < u.j_max + u.j_g; j++) {
+        for (int j = 0; j < u.j_max + u.j_g; j++) {
+            for (int i = 0; i < u.i_max + u.i_g; i++) {
                 file << u.grid[i][j];
-                if (j < u.j_max + u.j_g - 1)
+                if (i < u.i_max + u.i_g - 1)
                 {
                      file << ",";
                 }

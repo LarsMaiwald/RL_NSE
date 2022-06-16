@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include<bits/stdc++.h>
 #include "Grid.h"
 using namespace std;
 
@@ -69,11 +70,13 @@ bool tolerance_check(Grid &r, Grid &p_init, float eps, int norm, float chi){
     if(norm == 0){ // max_norm
 //        cout << "max_norm(r) = " << max_norm(r) << "\n";
 //        cout << "eps*max_norm(p_init) = " << eps*max_norm(p_init) << "\n";
+        cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\r";
         check = (max_norm(r) < eps*max_norm(p_init) + chi);
     }
     else if(norm == 1){ // L2_norm
 //        cout << "L2_norm(r)= " << L2_norm(r) << "\n";
 //        cout << "eps*L2_norm(p_init) = " << eps*L2_norm(p_init) << "\n";
+        cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\r";
         check = (L2_norm(r) < eps*L2_norm(p_init) + chi);
     }
     return check;

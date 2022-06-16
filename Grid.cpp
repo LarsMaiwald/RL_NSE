@@ -32,8 +32,8 @@ Grid::~Grid()
 
 void Grid::print() // Do we want to print the ghost cells?
 {
-    for (int i = 0; i < i_max + i_g; i++) {
-        for (int j = 0; j < j_max + j_g; j++) {
+    for (int j = 0; j < j_max + j_g; j++) {
+        for (int i = 0; i < i_max + i_g; i++) {
             cout << grid[i][j] << " ";
         }
         cout << "\n";

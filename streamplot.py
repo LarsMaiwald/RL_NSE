@@ -41,7 +41,7 @@ fig, ax = plt.subplots()
 try:
     stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
 except:
-    stream = ax.streanplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
+    stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
 cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
