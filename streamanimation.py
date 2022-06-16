@@ -50,16 +50,15 @@ def load_and_adjust(counter, U, V, P):
 U, V, P = load_and_adjust(1, U, V, P)
 
 speed = np.sqrt(U**2 + V**2)
-lw = 5*speed/np.max(speed)
+# lw = 5*speed/np.max(speed)
 
 # plotting
 fig, ax = plt.subplots()
-try:
-    stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
-except:
-    stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
-cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
-text = ax.text(0.8, 1.1, f'time: {t[0]}/{t[-1]}', transform=ax.transAxes)
+stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
+background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
+cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
+cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical')
+text = ax.text(1.0, 1.1, f'time: {t[0]}/{t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_xlim(0,a)
@@ -68,10 +67,12 @@ ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
 
-def animation_frame(frame, X, Y, U, V, P, t):
+def animation_frame(frame, X, Y, U, V, P, t, a, b):
     # Clear lines, arrowheads and colorbar
-    global cbar
-    cbar.remove()
+    global cbar_s, cbar_b, background
+    cbar_s.remove()
+    cbar_b.remove()
+    background.remove()
     for artist in ax.get_children():
         if isinstance(artist, FancyArrowPatch):
             artist.remove()
@@ -80,16 +81,15 @@ def animation_frame(frame, X, Y, U, V, P, t):
     # update frame
     U, V, P = load_and_adjust(frame, U, V, P)
     speed = np.sqrt(U**2 + V**2)
-    lw = 5*speed/np.max(speed)
-    try:
-        stream = ax.streamplot(X, Y, U, V, color=P, density=1, linewidth=lw)
-    except:
-        stream = ax.streamplot(X, Y, U, V, color='grey', density=1, linewidth=lw)
-    cbar = fig.colorbar(stream.lines, ax=ax, label=r'$p$', orientation='vertical')
+    # lw = 5*speed/np.max(speed)
+    stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
+    background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
+    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
+    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical')
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f}/{t[-1]}')
-    return stream, cbar
+    return stream, cbar_s, cbar_b, background
 
-animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=200, fargs=(X, Y, U, V, P, t)) # interval=2*dt*1000
+animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b)) # interval=2*dt*1000
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
 plt.show()
 
