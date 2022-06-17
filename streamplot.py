@@ -35,8 +35,7 @@ for i in range(i_max):
         U[i][j] = (u[i+1][j] + u[i+1][j+1])/2
         V[i][j] = (v[i][j+1] + v[i+1][j+1])/2
 P = p[1:-1, 1:-1]
-norm = Normalize(np.min(P), np.max(P))
-test = norm(P)
+
 speed = np.sqrt(U**2 + V**2)
 # lw = 5*speed/np.max(speed) # remove that line
 
@@ -44,8 +43,10 @@ speed = np.sqrt(U**2 + V**2)
 fig, ax = plt.subplots()
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
-cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
-cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical')
+cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
+cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
+cbar_b.ax.yaxis.set_ticks_position("left")
+cbar_b.ax.yaxis.set_label_position("left")
 text = ax.text(1.1, 1.1, f'time: {t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')

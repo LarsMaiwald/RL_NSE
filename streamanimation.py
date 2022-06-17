@@ -24,7 +24,8 @@ j_max = cfg.j_max
 
 counter_max = (len(os.listdir('../RL_NSE/outputs/')) - 1)/3 - 1
 t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
-t_dec = len(str(t[-1])) - 2
+s = str(t[-1])
+t_dec = len(s[s.rfind('.'):]) - 1
 
 # initializing the grid
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
@@ -56,8 +57,10 @@ speed = np.sqrt(U**2 + V**2)
 fig, ax = plt.subplots()
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
-cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
-cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical')
+cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
+cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
+cbar_b.ax.yaxis.set_ticks_position("left")
+cbar_b.ax.yaxis.set_label_position("left")
 text = ax.text(1.0, 1.1, f'time: {t[0]}/{t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
@@ -84,8 +87,10 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b):
     # lw = 5*speed/np.max(speed)
     stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
     background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
-    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
-    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical')
+    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
+    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
+    cbar_b.ax.yaxis.set_ticks_position("left")
+    cbar_b.ax.yaxis.set_label_position("left")
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f}/{t[-1]}')
     return stream, cbar_s, cbar_b, background
 
