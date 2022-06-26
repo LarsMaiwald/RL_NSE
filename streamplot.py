@@ -10,7 +10,6 @@ Created on Fri May  6 12:31:23 2022
 import numpy as np
 import matplotlib.pyplot as plt
 from load_cfg import load_cfg
-from matplotlib.colors import Normalize
 
 # loading parameter file
 cfg = load_cfg('../RL_NSE/config.cfg')
@@ -47,7 +46,7 @@ cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientat
 cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
 cbar_b.ax.yaxis.set_ticks_position("left")
 cbar_b.ax.yaxis.set_label_position("left")
-text = ax.text(1.1, 1.1, f'time: {t[-1]}', transform=ax.transAxes)
+text = ax.text(1.1, 1.1, f'ta: {t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_xlim(0,a)
