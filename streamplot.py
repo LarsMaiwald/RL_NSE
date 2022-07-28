@@ -39,14 +39,14 @@ speed = np.sqrt(U**2 + V**2)
 # lw = 5*speed/np.max(speed) # remove that line
 
 # plotting
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(6,4))
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
 cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
 cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
 cbar_b.ax.yaxis.set_ticks_position("left")
 cbar_b.ax.yaxis.set_label_position("left")
-text = ax.text(1.1, 1.1, f'ta: {t[-1]}', transform=ax.transAxes)
+text = ax.text(1.1, 1.1, f'time: {t[-1]}', transform=ax.transAxes)
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 ax.set_xlim(0,a)

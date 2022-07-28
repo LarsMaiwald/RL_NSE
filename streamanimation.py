@@ -70,7 +70,7 @@ speed = np.sqrt(U**2 + V**2)
 # lw = 5*speed/np.max(speed)
 
 # plotting
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(6,4))
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
 cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
@@ -111,7 +111,7 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b):
     cbar_b.ax.yaxis.set_label_position("left")
     cbar_s.formatter.set_powerlimits((0, 0))
     cbar_b.formatter.set_powerlimits((0, 0))
-    text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f}/{t[-1]}')
+    text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f} / {t[-1]}')
     return stream, cbar_s, cbar_b, background
 
 animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b)) # interval=2*dt*1000
