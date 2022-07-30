@@ -10,6 +10,7 @@ Created on Fri May  6 12:31:23 2022
 import numpy as np
 import matplotlib.pyplot as plt
 from load_cfg import load_cfg
+import matplotlib.image as mpimg
 
 # loading parameter file
 cfg = load_cfg('../RL_NSE/config.cfg')
@@ -17,13 +18,14 @@ a = cfg.a
 b = cfg.b
 i_max = cfg.i_max
 j_max = cfg.j_max
+m = cfg.shape_in_box
 
-t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
+t = np.genfromtxt('../RL_NSE/outputs/t_final.csv', delimiter=',')
 
 # loading arrays
-u = np.genfromtxt ('../RL_NSE/outputs/u_final.csv', delimiter=",")
-v = np.genfromtxt ('../RL_NSE/outputs/v_final.csv', delimiter=",")
-p = np.genfromtxt ('../RL_NSE/outputs/p_final.csv', delimiter=",")
+u = np.genfromtxt('../RL_NSE/outputs/u_final.csv', delimiter=',')
+v = np.genfromtxt('../RL_NSE/outputs/v_final.csv', delimiter=',')
+p = np.genfromtxt('../RL_NSE/outputs/p_final.csv', delimiter=',')
 
 # initializing the grid and adjusting stagered grid with averaging
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
@@ -42,7 +44,9 @@ speed = np.sqrt(U**2 + V**2)
 fig, ax = plt.subplots(figsize=(6,4))
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
-cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
+if m != 0:
+    mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
+cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.001)
 cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
 cbar_b.ax.yaxis.set_ticks_position("left")
 cbar_b.ax.yaxis.set_label_position("left")

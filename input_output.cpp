@@ -10,7 +10,7 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step)
+int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step, int &shape_in_box)
 {   
     Config cfg;
 
@@ -52,6 +52,7 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
         t_final = cfg.lookup("t_final");
         chi = cfg.lookup("chi");
         save_step = cfg.lookup("save_step");
+        shape_in_box = cfg.lookup("shape_in_box");
     }
     catch(const SettingNotFoundException &nfex)
     {
@@ -93,4 +94,25 @@ void time2file(float t, string filename)
         file.close();
     }
     else cout << "Unable to open file" << filename << "\n";
+}
+
+void file2grid(Grid &u, string filename)
+{
+    int c_i = 0;
+    int c_j = 0;
+    ifstream file;
+    file.open(filename);
+    while(file.good())
+    {
+        string line;
+        getline(file, line, ',');
+        u.grid[c_i][c_j] = stoi(line);
+        c_i += 1;
+        if(c_i == u.i_max-1)
+        {
+            c_i = 0;
+            c_j += 1;
+        }
+    }
+    file.close();
 }

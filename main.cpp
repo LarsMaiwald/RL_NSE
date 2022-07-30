@@ -14,13 +14,13 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm, save_step;
+    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box;
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step);
+    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -41,6 +41,7 @@ int main()
 //    cout << "t_final = " << t_final << "\n";
 //    cout << "chi = " << chi << "\n";
 //    cout << "save_step = " << save_step << "\n";
+//    cout << "shape_in_box = " << shape_in_box << "\n";
 //    cout << "\n";
 //    Grid u(i_max, j_max, 1, 2);
 //    Grid v(i_max, j_max, 2, 1);
@@ -56,7 +57,7 @@ int main()
 //    grid2file(p, "../RL_NSE/p.csv");
 
     // Cleaning output directory
-    system("rm ../RL_NSE/outputs/*");
+    system("rm ../RL_NSE/outputs/* || echo Output directory already empty.");
 
     // Creating all grids
     Grid p(i_max, j_max, 2, 2);
@@ -78,6 +79,7 @@ int main()
     Grid d2vdy2(i_max, j_max, 2, 1);
     Grid duvdx(i_max, j_max, 2, 1);
     Grid dv2dy(i_max, j_max, 2, 1);
+    Grid shape(i_max, j_max, 0, 0);
 
     // Time evolution loop
     float t = 0;
@@ -90,7 +92,7 @@ int main()
         cout << "Starting time step " << counter << " at time " << t << " of " << t_final << "\n";
         // Choosing time step
 //        cout << "Choosing time step \n";
-        float dt = time_step(u, v, tau, Re, dx, dy);
+        float dt = time_step(u, v, tau, Re, dx, dy); // Should this be after the boundary conditions?
         t += dt;
 
         // Filling ghost cells according to boundary condition
@@ -107,6 +109,10 @@ int main()
 
         // Additional boundary condition
         bc_upper(u, u_in);
+        if(shape_in_box != 0)
+        {
+            bc_shape_in_box(shape, u, v, i_max, j_max, to_string(shape_in_box)+".csv");
+        }
 
         // Computing F and G
 //        cout << "Computing gamma \n";
@@ -167,4 +173,5 @@ int main()
     grid2file(u, "../RL_NSE/outputs/u_final.csv");
     grid2file(v, "../RL_NSE/outputs/v_final.csv");
     grid2file(p, "../RL_NSE/outputs/p_final.csv");
+    cout << "Every " << save_step << "th time step was saved, which results in a total of " << c << " saved time steps. \n";
 }
