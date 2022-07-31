@@ -16,6 +16,7 @@ from matplotlib.colors import Normalize
 from load_cfg import load_cfg
 import os
 import matplotlib.image as mpimg
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # loading parameter file
 cfg = load_cfg('../RL_NSE/config.cfg')
@@ -73,15 +74,16 @@ speed = np.sqrt(U**2 + V**2)
 # lw = 5*speed/np.max(speed)
 
 # plotting
-fig, ax = plt.subplots(figsize=(6,4))
+fig, ax = plt.subplots(figsize=(6*(a/b)**0.6,4))
+divider = make_axes_locatable(ax)
+cax_b = divider.append_axes("right", size=0.2, pad=0.4)
+cax_s = divider.append_axes("right", size=0.2, pad=0.7)
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
 if m != 0:
     mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
-cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=0.09, fraction=0.046)
-cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.14, fraction=0.046)
-cbar_b.ax.yaxis.set_ticks_position("left")
-cbar_b.ax.yaxis.set_label_position("left")
+cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
+cbar_b = fig.colorbar(background, cax=cax_b, label=r'$p$', orientation='vertical')
 cbar_s.formatter.set_powerlimits((0, 0))
 cbar_b.formatter.set_powerlimits((0, 0))
 text = ax.text(1.0, 1.1, f't: {t[0]}/{t[-1]}', transform=ax.transAxes)
@@ -110,14 +112,15 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m):
     U, V, P = load_and_adjust(frame, U, V, P)
     speed = np.sqrt(U**2 + V**2)
     # lw = 5*speed/np.max(speed)
+    divider = make_axes_locatable(ax)
+    cax_b = divider.append_axes("right", size=0.2, pad=0.4)
+    cax_s = divider.append_axes("right", size=0.2, pad=0.7)
     stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
     background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
     if m != 0:
         mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
-    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=0.09, fraction=0.046)
-    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.14, fraction=0.046)
-    cbar_b.ax.yaxis.set_ticks_position("left")
-    cbar_b.ax.yaxis.set_label_position("left")
+    cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
+    cbar_b = fig.colorbar(background, cax=cax_b, label=r'$p$', orientation='vertical')
     cbar_s.formatter.set_powerlimits((0, 0))
     cbar_b.formatter.set_powerlimits((0, 0))
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f} / {t[-1]}')
