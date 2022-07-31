@@ -14,13 +14,14 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box;
-    float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi;
+    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, no[4], in[4], out[4];
+    float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c;
+    bool in_c;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, boundary_condition, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box);
+    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, no, in, out, in_c);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -90,44 +91,40 @@ int main()
     while(t < t_final){
         counter += 1;
         cout << "Starting time step " << counter << " at time " << t << " of " << t_final << "\n";
+
+        // Adjusting inflow velocities periodically
+        if(in_c)
+        {
+            inflow_change(u_in_c, v_in_c, u_in, v_in, t);
+        }
+        else
+        {
+            u_in_c = u_in;
+            v_in_c = v_in;
+        }
+
         // Choosing time step
-//        cout << "Choosing time step \n";
         float dt = time_step(u, v, tau, Re, dx, dy); // Should this be after the boundary conditions?
         t += dt;
 
         // Filling ghost cells according to boundary condition
-//        cout << "Filling ghost cells according to boundary condition \n";
-        if(boundary_condition == 0){
-            bc_noslip(u, v);
-        }
-        else if(boundary_condition == 1){
-            bc_outflow(u, v);
-        }
-        else if(boundary_condition == 2){
-            bc_inflow(u, v, u_in, v_in);
-        }
+        bc_all(u, v, u_in_c, v_in_c, no, in, out);
 
         // Additional boundary condition
-        bc_upper(u, u_in);
         if(shape_in_box != 0)
         {
             bc_shape_in_box(shape, u, v, i_max, j_max, to_string(shape_in_box)+".csv");
         }
 
         // Computing F and G
-//        cout << "Computing gamma \n";
         float gamma = get_gamma(u, v, dx, dy, dt, pre);
-//        cout << "Computing derivative stencils \n";
         derivative_stencils(u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dx, dy, gamma);
-//        cout << "Computing F and G \n";
         F_and_G(F, G, u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dt, Re, g_x, g_y);
 
         // Calculate RHS of pressure eq.
-//        cout << "Calculating RHS of pressure eq. \n";
         calc_RHS(RHS, F, G, dx, dy, dt);
 
         // SOR iteration loop
-//        cout << "SOR iteration loop \n";
         bool check = false;
         for(int i = 0; i < p.i_max + p.i_g; i++){
             for(int j = 0; j < p.j_max + p.j_g; j++){
@@ -155,8 +152,9 @@ int main()
         pressure_deriv(p, dpdx, dpdy, dx, dy);
 
         // Compute the new velocity components u and v
-//        cout << "Compute the new velocity components u and v \n";
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
+
+        bc_all(u, v, u_in, v_in, no, in, out);
 
         // Output
         if(counter % save_step == 0){
@@ -169,7 +167,6 @@ int main()
     }
 
     // Final output
-//    cout << "Outputting grids \n";
     grid2file(u, "../RL_NSE/outputs/u_final.csv");
     grid2file(v, "../RL_NSE/outputs/v_final.csv");
     grid2file(p, "../RL_NSE/outputs/p_final.csv");

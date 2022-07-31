@@ -10,7 +10,7 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condition, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step, int &shape_in_box)
+int load_config(float &a, float &b, int &i_max, int &j_max, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step, int &shape_in_box, int no[4], int in[4], int out[4], bool &in_c)
 {   
     Config cfg;
 
@@ -38,7 +38,6 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
         b = cfg. lookup("b");
         i_max = cfg. lookup("i_max");
         j_max = cfg. lookup("j_max");
-        boundary_condition = cfg. lookup("boundary_condition");
         u_in = cfg.lookup("u_in");
         v_in = cfg.lookup("v_in");
         Re = cfg.lookup("Re");
@@ -53,6 +52,19 @@ int load_config(float &a, float &b, int &i_max, int &j_max, int &boundary_condit
         chi = cfg.lookup("chi");
         save_step = cfg.lookup("save_step");
         shape_in_box = cfg.lookup("shape_in_box");
+        no[0] = cfg.lookup("no0");
+        no[1] = cfg.lookup("no1");
+        no[2] = cfg.lookup("no2");
+        no[3] = cfg.lookup("no3");
+        in[0] = cfg.lookup("in0");
+        in[1] = cfg.lookup("in1");
+        in[2] = cfg.lookup("in2");
+        in[3] = cfg.lookup("in3");
+        out[0] = cfg.lookup("out0");
+        out[1] = cfg.lookup("out1");
+        out[2] = cfg.lookup("out2");
+        out[3] = cfg.lookup("out3");
+        in_c = cfg.lookup("in_c");
     }
     catch(const SettingNotFoundException &nfex)
     {

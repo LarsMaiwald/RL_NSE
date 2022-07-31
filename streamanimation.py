@@ -32,9 +32,9 @@ t_dec = len(s[s.rfind('.'):]) - 1
 
 # initializing the grid
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
-U = np.empty((i_max, j_max))
-V = np.empty((i_max, j_max))
-P = np.empty((i_max, j_max))
+U = np.empty((j_max, i_max))
+V = np.empty((j_max, i_max))
+P = np.empty((j_max, i_max))
 
 def load_and_adjust(counter, U, V, P):
     # loading arrays
@@ -44,10 +44,11 @@ def load_and_adjust(counter, U, V, P):
     p = np.genfromtxt (f'../RL_NSE/outputs/p{counter}.csv', delimiter=",")
     
     # adjusting stagered grid with averaging
+    # the order of indexing is swapped here in comparison to the c++ code!!!
     for i in range(i_max):
         for j in range(j_max):
-            U[i][j] = (u[i+1][j] + u[i+1][j+1])/2
-            V[i][j] = (v[i][j+1] + v[i+1][j+1])/2
+            U[j][i] = (u[j+1][i] + u[j+1][i+1])/2
+            V[j][i] = (v[j][i+1] + v[j+1][i+1])/2
     P = p[1:-1, 1:-1]
     return U, V, P
 
@@ -77,8 +78,8 @@ stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=nor
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
 if m != 0:
     mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
-cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.05)
-cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
+cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=0.09, fraction=0.046)
+cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.14, fraction=0.046)
 cbar_b.ax.yaxis.set_ticks_position("left")
 cbar_b.ax.yaxis.set_label_position("left")
 cbar_s.formatter.set_powerlimits((0, 0))
@@ -113,8 +114,8 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m):
     background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
     if m != 0:
         mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
-    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=-0.001)
-    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.13)
+    cbar_s = fig.colorbar(stream.lines, ax=ax, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical', pad=0.09, fraction=0.046)
+    cbar_b = fig.colorbar(background, ax=ax, label=r'$p$', orientation='vertical', pad=0.14, fraction=0.046)
     cbar_b.ax.yaxis.set_ticks_position("left")
     cbar_b.ax.yaxis.set_label_position("left")
     cbar_s.formatter.set_powerlimits((0, 0))
