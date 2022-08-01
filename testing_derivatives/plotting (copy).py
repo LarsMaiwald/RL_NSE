@@ -27,7 +27,7 @@ x = np.genfromtxt ('../testing_derivatives/outputs/x.csv', delimiter=",")
 y = np.genfromtxt ('../testing_derivatives/outputs/y.csv', delimiter=",")
 
 #put into Array for Plotting
-numRes_Arr = [u, v, d2udx2, d2udy2, d2vdx2, d2vdy2, du2dx, dv2dy, duvdx, duvdy]
+numRes_Arr = [u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy]
 
 #calculate analytical derivative using sympy
 X = sy.symbols('X')
@@ -44,9 +44,8 @@ DUVDX = sy.diff(U*V, X)
 DV2DY = sy.diff(V**2, Y)
 
 #put into Array for Plotting
-analytRes_Arr_temp = [U, V, D2UDX2, D2UDY2, D2VDX2, D2VDY2, DU2DX, DV2DY, DUVDX, DUVDY]
+analytRes_Arr_temp = [U, V, D2UDX2, D2UDY2, DU2DX, DUVDY, D2VDX2, D2VDY2, DUVDX, DV2DY]
 analytRes_Arr = []
-strRes_Arr = [r'u', r'v', r'\frac{\partial^2 u}{\partial x^2}', r'\frac{\partial^2 u}{\partial y^2}', r'\frac{\partial^2 v}{\partial x^2}', r'\frac{\partial^2 v}{\partial y^2}', r'\frac{\partial u^2}{\partial x}', r'\frac{\partial v^2}{\partial y}', r'\frac{\partial uv}{\partial x}', r'\frac{\partial uv}{\partial y}']
 #turn sympy expressions into callable functions
 for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr_temp[k] = sy.lambdify([X,Y], analytRes_Arr_temp[k], "numpy")
@@ -57,18 +56,18 @@ for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr.append(temp)
 
 
+fig, ax = plt.subplots(len(numRes_Arr), 2, figsize= (7, (len(numRes_Arr)/2) * 7))
+
 for i in range(len(numRes_Arr)):
-    fig, ax = plt.subplots(1, 2, figsize= (7, 3.5))
+    ax[i][0].pcolormesh(x, y, numRes_Arr[i])
+    ax[i][1].pcolormesh(x, y, analytRes_Arr[i])
 
-    for i in range(len(numRes_Arr)):
-        ax[0].pcolormesh(x, y, numRes_Arr[i])
-        ax[1].pcolormesh(x, y, analytRes_Arr[i])
+#for i in range(len(numRes_Arr)):
+#    for j in range(2):\
+        #ax[i][j].set(xlabel='x', ylabel='y')
 
-    ax[0].set_title('Numerical Solution')
-    ax[1].set_title('Analytical Solution')
-    for i in range(2):
-        ax[i].set_ylabel('y')
-        ax[i].set_xlabel('x')
-    fig.suptitle(strRes_Arr[i], fontsize=14)
-    fig.tight_layout()
-    fig.savefig('../testing_derivatives/plots/comparison_' + strRes_Arr[i] + '.png', dpi=200)
+#ax[0][0].set(title = 'Numerical Solution')
+#ax[0][1].set(title = 'Analytical Solution')
+fig.tight_layout()
+fig.savefig('../testing_derivatives/plots/comparison.png', dpi=200)
+plt.show()
