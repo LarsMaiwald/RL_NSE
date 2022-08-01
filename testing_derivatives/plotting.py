@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from load_cfg import load_cfg
 import sympy as sy
+import os
 
 # loading parameter file
 cfg = load_cfg('../testing_derivatives/config.cfg')
@@ -57,18 +58,23 @@ for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr.append(temp)
 
 
-for i in range(len(numRes_Arr)):
-    fig, ax = plt.subplots(1, 2, figsize= (7, 3.5))
+outpath = "../testing_derivatives/plots"
 
-    for i in range(len(numRes_Arr)):
-        ax[0].pcolormesh(x, y, numRes_Arr[i])
-        ax[1].pcolormesh(x, y, analytRes_Arr[i])
+fig, ax = plt.subplots(1, 2, figsize= (7, 3.5))        # generate figure with axes
+ax[0].pcolormesh(x, y, numRes_Arr[0])    # initialize plot
+ax[1].pcolormesh(x, y, analytRes_Arr[0])
+for i in range(2):
+    ax[i].set_xlabel('x')
+    ax[i].set_ylabel('y')
+fig.suptitle(strRes_Arr[0], fontsize=14)
+fig.tight_layout()
+plt.draw()
+fig.savefig(os.path.join(outpath,"comparison_0.png"))
 
-    ax[0].set_title('Numerical Solution')
-    ax[1].set_title('Analytical Solution')
-    for i in range(2):
-        ax[i].set_ylabel('y')
-        ax[i].set_xlabel('x')
+for i in range(1, len(numRes_Arr)):
+    ax[0].pcolormesh(x, y, numRes_Arr[i])
+    ax[1].pcolormesh(x, y, analytRes_Arr[i])
     fig.suptitle(strRes_Arr[i], fontsize=14)
     fig.tight_layout()
-    fig.savefig('../testing_derivatives/plots/comparison_' + strRes_Arr[i] + '.png', dpi=200)
+    plt.draw()
+    fig.savefig(os.path.join(outpath,"comparison_{0}.png".format(i)), dpi=200)
