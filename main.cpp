@@ -14,14 +14,14 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, no[4], in[4], out[4];
+    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4];
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c;
     bool in_c;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, no, in, out, in_c);
+    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -108,7 +108,7 @@ int main()
         t += dt;
 
         // Filling ghost cells according to boundary condition
-        bc_all(u, v, u_in_c, v_in_c, no, in, out);
+        set_boundaries(u, v, u_in, v_in, bc);
 
         // Additional boundary condition
         if(shape_in_box != 0)
@@ -153,8 +153,6 @@ int main()
 
         // Compute the new velocity components u and v
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
-
-        bc_all(u, v, u_in, v_in, no, in, out);
 
         // Output
         if(counter % save_step == 0){
