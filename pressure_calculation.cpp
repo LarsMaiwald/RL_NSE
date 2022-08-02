@@ -5,9 +5,13 @@
 using namespace std;
 
 void pressure_deriv(Grid &p, Grid &dpdx, Grid &dpdy, float dx, float dy){
-    for(int i = 1; i < p.i_max + 1; i++){ // is the range correct?
-        for(int j = 1; j < p.j_max + 1; j++){ // is the range correct?
+    for(int i = 1; i < dpdx.i_max; i++){ // is the range correct?
+        for(int j = 1; j < dpdx.j_max + 1; j++){ // is the range correct?
             dpdx.grid[i][j] = (p.grid[i+1][j] - p.grid[i][j])/dx;
+        }
+    }
+    for(int i = 1; i < dpdy.i_max + 1; i++){ // is the range correct?
+        for(int j = 1; j < dpdy.j_max; j++){ // is the range correct?
             dpdy.grid[i][j] = (p.grid[i][j+1] - p.grid[i][j])/dy;
         }
     }

@@ -86,8 +86,8 @@ int main()
     float t = 0;
     int counter = 0;
     int c = 0;
-    float dx = a/i_max; // is this correct?
-    float dy = b/j_max; // is this correct?
+    float dx = a/i_max;
+    float dy = b/j_max;
     while(t < t_final){
         counter += 1;
         cout << "Starting time step " << counter << " at time " << t << " of " << t_final << "\n";
@@ -170,5 +170,19 @@ int main()
     grid2file(u, "../RL_NSE/outputs/u_final.csv");
     grid2file(v, "../RL_NSE/outputs/v_final.csv");
     grid2file(p, "../RL_NSE/outputs/p_final.csv");
-    cout << "Every " << save_step << "th time step was saved, which results in a total of " << c << " saved time steps. \n";
+    cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps. \n";
+
+    grid2file(F, "../RL_NSE/outputs/F_final.csv");
+    grid2file(G, "../RL_NSE/outputs/G_final.csv");
+    grid2file(d2udx2, "../RL_NSE/outputs/d2udx2_final.csv");
+    grid2file(d2udy2, "../RL_NSE/outputs/d2udy2_final.csv");
+    grid2file(du2dx, "../RL_NSE/outputs/du2dx_final.csv");
+    grid2file(duvdy, "../RL_NSE/outputs/duvdy_final.csv");
+    grid2file(d2vdx2, "../RL_NSE/outputs/d2vdx2_final.csv");
+    grid2file(d2vdy2, "../RL_NSE/outputs/d2vdy2_final.csv");
+    grid2file(duvdx, "../RL_NSE/outputs/duvdx_final.csv");
+    grid2file(dv2dy, "../RL_NSE/outputs/dv2dy_final.csv");
+    grid2file(dpdx, "../RL_NSE/outputs/dpdx_final.csv");
+    grid2file(dpdy, "../RL_NSE/outputs/dpdy_final.csv");
+    grid2file(RHS, "../RL_NSE/outputs/RHS_final.csv");
 }
