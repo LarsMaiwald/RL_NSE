@@ -20,6 +20,7 @@ b = cfg.b
 i_max = cfg.i_max
 j_max = cfg.j_max
 m = cfg.shape_in_box
+lsl = cfg.lsl
 
 t = np.genfromtxt('../RL_NSE/outputs/t_final.csv', delimiter=',')
 
@@ -37,6 +38,9 @@ for i in range(i_max):
     for j in range(j_max):
         U[j][i] = (u[j+1][i] + u[j+1][i+1])/2
         V[j][i] = (v[j][i+1] + v[j+1][i+1])/2
+        if np.sqrt(U[j][i]**2 + V[j][i]**2) < lsl*np.sqrt(np.max(U)**2 + np.max(V)**2):
+            U[j][i] = 0
+            V[j][i] = 0
 P = p[1:-1, 1:-1]
 
 speed = np.sqrt(U**2 + V**2)
