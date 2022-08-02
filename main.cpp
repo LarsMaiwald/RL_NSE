@@ -15,13 +15,13 @@ int main()
 {
     // Initialization
     int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4];
-    float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c;
+    float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c, SOR_max_iter;
     bool in_c;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c);
+    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c, SOR_max_iter);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -82,6 +82,8 @@ int main()
     Grid dv2dy(i_max, j_max, 2, 1);
     Grid shape(i_max, j_max, 0, 0);
 
+//    grid_init_val(u, 1);
+
     // Time evolution loop
     float t = 0;
     int counter = 0;
@@ -134,18 +136,20 @@ int main()
         int k = 0;
         while(!check){
             k += 1;
-            if(k == 10000000000/(i_max*j_max)){
+            if(k == int(SOR_max_iter/(i_max*j_max))){
                 cout << "SOR did not converge in given number of steps. \n";
-                break;
+                cout << "Stopping simulation. \n";
+                cout << "Arrays saved to .csv files. \n";
+                grid2file(r, "../RL_NSE/outputs/r_SOR_conv_prob.csv");
+                grid2file(p, "../RL_NSE/outputs/p_SOR_conv_prob.csv");
+                grid2file(u, "../RL_NSE/outputs/u_SOR_conv_prob.csv");
+                grid2file(v, "../RL_NSE/outputs/v_SOR_conv_prob.csv");
+                exit(1);
             }
             set_pressure_boundaries(p, p_new);
             pressure(p, p_new, RHS, dx, dy, w);
             residual(r, p, RHS, dx, dy);
             check = tolerance_check(r, p_init, eps, norm, chi);
-        }
-        if(k == 10000000000/(i_max*j_max)){
-            cout << "Stopping simulation. \n";
-            break;
         }
 
         // Calculate the pressure derivatives
@@ -170,17 +174,18 @@ int main()
     grid2file(p, "../RL_NSE/outputs/p_final.csv");
     cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps. \n";
 
-    grid2file(F, "../RL_NSE/outputs/F_final.csv");
-    grid2file(G, "../RL_NSE/outputs/G_final.csv");
-    grid2file(d2udx2, "../RL_NSE/outputs/d2udx2_final.csv");
-    grid2file(d2udy2, "../RL_NSE/outputs/d2udy2_final.csv");
-    grid2file(du2dx, "../RL_NSE/outputs/du2dx_final.csv");
-    grid2file(duvdy, "../RL_NSE/outputs/duvdy_final.csv");
-    grid2file(d2vdx2, "../RL_NSE/outputs/d2vdx2_final.csv");
-    grid2file(d2vdy2, "../RL_NSE/outputs/d2vdy2_final.csv");
-    grid2file(duvdx, "../RL_NSE/outputs/duvdx_final.csv");
-    grid2file(dv2dy, "../RL_NSE/outputs/dv2dy_final.csv");
-    grid2file(dpdx, "../RL_NSE/outputs/dpdx_final.csv");
-    grid2file(dpdy, "../RL_NSE/outputs/dpdy_final.csv");
-    grid2file(RHS, "../RL_NSE/outputs/RHS_final.csv");
+    // debugging output
+//    grid2file(F, "../RL_NSE/outputs/F_final.csv");
+//    grid2file(G, "../RL_NSE/outputs/G_final.csv");
+//    grid2file(d2udx2, "../RL_NSE/outputs/d2udx2_final.csv");
+//    grid2file(d2udy2, "../RL_NSE/outputs/d2udy2_final.csv");
+//    grid2file(du2dx, "../RL_NSE/outputs/du2dx_final.csv");
+//    grid2file(duvdy, "../RL_NSE/outputs/duvdy_final.csv");
+//    grid2file(d2vdx2, "../RL_NSE/outputs/d2vdx2_final.csv");
+//    grid2file(d2vdy2, "../RL_NSE/outputs/d2vdy2_final.csv");
+//    grid2file(duvdx, "../RL_NSE/outputs/duvdx_final.csv");
+//    grid2file(dv2dy, "../RL_NSE/outputs/dv2dy_final.csv");
+//    grid2file(dpdx, "../RL_NSE/outputs/dpdx_final.csv");
+//    grid2file(dpdy, "../RL_NSE/outputs/dpdy_final.csv");
+//    grid2file(RHS, "../RL_NSE/outputs/RHS_final.csv");
 }
