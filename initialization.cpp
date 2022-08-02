@@ -21,3 +21,4 @@ void grid_init_val(Grid &u, float val)
         }
     }
 }
+

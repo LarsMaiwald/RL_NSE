@@ -82,7 +82,13 @@ int main()
     Grid dv2dy(i_max, j_max, 2, 1);
     Grid shape(i_max, j_max, 0, 0);
 
-//    grid_init_val(u, 1);
+
+    if(bc[0] == 2 || bc[1] == 2 || bc[2] == 2 || bc[3] == 2){
+        grid_init_val(u, u_in);
+        grid_init_val(v, v_in);
+    }
+    u_in_c = u_in;
+    v_in_c = v_in;
 
     // Time evolution loop
     float t = 0;
@@ -98,11 +104,6 @@ int main()
         if(in_c)
         {
             inflow_change(u_in_c, v_in_c, u_in, v_in, t);
-        }
-        else
-        {
-            u_in_c = u_in;
-            v_in_c = v_in;
         }
 
         // Choosing time step
@@ -133,17 +134,13 @@ int main()
                 p_init.grid[i][j] = p.grid[i][j];
             }
         }
+
         int k = 0;
         while(!check){
             k += 1;
             if(k == int(SOR_max_iter/(i_max*j_max))){
                 cout << "SOR did not converge in given number of steps. \n";
                 cout << "Stopping simulation. \n";
-                cout << "Arrays saved to .csv files. \n";
-                grid2file(r, "../RL_NSE/outputs/r_SOR_conv_prob.csv");
-                grid2file(p, "../RL_NSE/outputs/p_SOR_conv_prob.csv");
-                grid2file(u, "../RL_NSE/outputs/u_SOR_conv_prob.csv");
-                grid2file(v, "../RL_NSE/outputs/v_SOR_conv_prob.csv");
                 exit(1);
             }
             set_pressure_boundaries(p, p_new);
@@ -159,7 +156,7 @@ int main()
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
 
         // Output
-        if(counter % save_step == 0){
+        if((counter - 1) % save_step == 0){
             c += 1;
             time2file(t, "../RL_NSE/outputs/t_final.csv");
             grid2file(u, "../RL_NSE/outputs/u" + to_string(c) + ".csv");

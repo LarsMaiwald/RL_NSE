@@ -25,7 +25,6 @@ void calc_RHS(Grid &RHS, Grid &F, Grid &G, float dx, float dy, float dt){
     }
 }
 
-// pressure as in the manual
 void pressure(Grid &p, Grid &p_new, Grid &RHS, float dx, float dy, float w){
     for(int i = 1; i < p.i_max + 1; i++){ // is the range correct?
         for(int j = 1; j < p.j_max + 1; j++){ // is the range correct?
@@ -39,29 +38,6 @@ void pressure(Grid &p, Grid &p_new, Grid &RHS, float dx, float dy, float w){
     }
 }
 
-//// pressure as in Griebel et al. 1998
-//void pressure(Grid &p, Grid &p_new, Grid &RHS, float dx, float dy, float w){
-//    for(int i = 1; i < p.i_max + 1; i++){ // is the range correct?
-//        for(int j = 1; j < p.j_max + 1; j++){ // is the range correct?
-//            int eN = 1;
-//            int eW = 1;
-//            int eS = 1;
-//            int eE = 1;
-//            if(j == p.j_max){eN = 0;}
-//            if(i == 1){eW = 0;}
-//            if(j == 1){eS = 0;}
-//            if(i == p.i_max){eE = 0;}
-//            p_new.grid[i][j] = (1 - w)*p.grid[i][j] + (w/(((eE + eW)/(dx*dx) + (eN + eS)/(dy*dy))))*((eE*p.grid[i+1][j] + eW*p_new.grid[i-1][j])/(dx*dx) + (eN*p.grid[i][j+1] + eS*p_new.grid[i][j-1])/(dy*dy) - RHS.grid[i][j]);
-//        }
-//    }
-//    for(int i = 0; i < p.i_max + p.i_g; i++){ // is the range correct?
-//        for(int j = 0; j < p.j_max + p.j_g; j++){ // is the range correct?
-//            p.grid[i][j] = p_new.grid[i][j];
-//        }
-//    }
-//}
-
-// residual as in the manual
 void residual(Grid &r, Grid &p, Grid &RHS, float dx, float dy){
     for(int i = 1; i < r.i_max + 1; i++){ // is the range correct?
         for(int j = 1; j < r.j_max + 1; j++){ // is the range correct?
@@ -70,25 +46,7 @@ void residual(Grid &r, Grid &p, Grid &RHS, float dx, float dy){
     }
 }
 
-// residual as in Griebel et al. 1998
-//void residual(Grid &r, Grid &p, Grid &RHS, float dx, float dy){
-//    for(int i = 1; i < r.i_max + 1; i++){ // is the range correct?
-//        for(int j = 1; j < r.j_max + 1; j++){ // is the range correct?
-//            int eN = 1;
-//            int eW = 1;
-//            int eS = 1;
-//            int eE = 1;
-//            if(j == p.j_max){eN = 0;}
-//            if(i == 1){eW = 0;}
-//            if(j == 1){eS = 0;}
-//            if(i == p.i_max){eE = 0;}
-//            r.grid[i][j] = (eE*(p.grid[i+1][j] - p.grid[i][j]) - eW*(p.grid[i][j] - p.grid[i-1][j]))/(dx*dx) + (eN*(p.grid[i][j+1] - p.grid[i][j]) - eS*(p.grid[i][j] - p.grid[i][j-1]))/(dy*dy) - RHS.grid[i][j];
-//        }
-//    }
-//}
-
 float L2_norm(Grid &r){
-    // include boundary?
     float sum = 0;
     for(int i = 1; i < r.i_max + 1; i++){ // is the range correct?
         for(int j = 1; j < r.j_max + 1; j++){ // is the range correct?
@@ -100,7 +58,6 @@ float L2_norm(Grid &r){
 }
 
 float max_norm(Grid &r){
-    // include boundary?
     float max_norm = abs(r.grid[1][1]);
     for(int i = 1; i < r.i_max + 1; i++){ // is the range correct?
         for(int j = 1; j < r.j_max + 1; j++){ // is the range correct?
