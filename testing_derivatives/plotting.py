@@ -47,7 +47,7 @@ DV2DY = sy.diff(V**2, Y)
 #put into Array for Plotting
 analytRes_Arr_temp = [U, V, D2UDX2, D2UDY2, D2VDX2, D2VDY2, DU2DX, DV2DY, DUVDX, DUVDY]
 analytRes_Arr = []
-strRes_Arr = [r'u', r'v', r'\frac{\partial^2 u}{\partial x^2}', r'\frac{\partial^2 u}{\partial y^2}', r'\frac{\partial^2 v}{\partial x^2}', r'\frac{\partial^2 v}{\partial y^2}', r'\frac{\partial u^2}{\partial x}', r'\frac{\partial v^2}{\partial y}', r'\frac{\partial uv}{\partial x}', r'\frac{\partial uv}{\partial y}']
+strRes_Arr = [r'$u$', r'$v$', r'$\frac{\partial^2 u}{\partial x^2}$', r'$\frac{\partial^2 u}{\partial y^2}$', r'$\frac{\partial^2 v}{\partial x^2}$', r'$\frac{\partial^2 v}{\partial y^2}$', r'$\frac{\partial u^2}{\partial x}$', r'$\frac{\partial v^2}{\partial y}$', r'$\frac{\partial uv}{\partial x}$', r'$\frac{\partial uv}{\partial y}$']
 #turn sympy expressions into callable functions
 for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr_temp[k] = sy.lambdify([X,Y], analytRes_Arr_temp[k], "numpy")
