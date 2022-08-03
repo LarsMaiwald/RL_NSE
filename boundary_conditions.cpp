@@ -172,7 +172,6 @@ void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string
             }
         }
     }
-//    grid2file(shape, "../RL_NSE/shapes/returned_1.csv");
 }
 
 void inflow_change(float &u_in_c, float &v_in_c, float u_in, float v_in, float t)

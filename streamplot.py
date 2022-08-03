@@ -38,7 +38,7 @@ for i in range(i_max):
     for j in range(j_max):
         U[j][i] = (u[j+1][i] + u[j+1][i+1])/2
         V[j][i] = (v[j][i+1] + v[j+1][i+1])/2
-        if lsl != 0 and np.sqrt(U[j][i]**2 + V[j][i]**2) < lsl*np.sqrt(np.max(U)**2 + np.max(V)**2):
+        if lsl != 0 and np.sqrt(U[j][i]**2 + V[j][i]**2) < lsl*np.sqrt(np.mean(U)**2 + np.mean(V)**2):
             U[j][i] = 0
             V[j][i] = 0
 P = p[1:-1, 1:-1]
