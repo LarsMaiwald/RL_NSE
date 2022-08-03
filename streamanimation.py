@@ -26,6 +26,7 @@ i_max = cfg.i_max
 j_max = cfg.j_max
 m = cfg.shape_in_box
 lsl = cfg.lsl
+fix_color = cfg.fix_color
 
 counter_max = int((len(os.listdir('../RL_NSE/outputs/')) - 1)/3 - 1)
 t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
@@ -57,20 +58,22 @@ def load_and_adjust(counter, U, V, P):
     P = p[1:-1, 1:-1]
     return U, V, P
 
-# finding pressure and velocity min and max
-P_min = 0
-P_max = 0
-speed_min = 0
-speed_max = 0
-for i in range(1, counter_max+1):
-    U, V, P = load_and_adjust(i, U, V, P)
-    speed = np.sqrt(U**2 + V**2)
-    P_min = np.min([P_min, np.min(P)])
-    P_max = np.max([P_max, np.max(P)])
-    speed_min = np.min([speed_min, np.min(speed)])
-    speed_max = np.max([speed_max, np.max(speed)])
-norm_s = Normalize(speed_min, speed_max)
-norm_b = Normalize(P_min, P_max)
+
+if fix_color == 1:
+    # finding pressure and velocity min and max
+    P_min = 0
+    P_max = 0
+    speed_min = 0
+    speed_max = 0
+    for i in range(1, counter_max+1):
+        U, V, P = load_and_adjust(i, U, V, P)
+        speed = np.sqrt(U**2 + V**2)
+        P_min = np.min([P_min, np.min(P)])
+        P_max = np.max([P_max, np.max(P)])
+        speed_min = np.min([speed_min, np.min(speed)])
+        speed_max = np.max([speed_max, np.max(speed)])
+    norm_s = Normalize(speed_min, speed_max)
+    norm_b = Normalize(P_min, P_max)
     
 U, V, P = load_and_adjust(1, U, V, P)
 
@@ -82,8 +85,12 @@ fig, ax = plt.subplots(figsize=(6*(a/b)**0.6,4))
 divider = make_axes_locatable(ax)
 cax_b = divider.append_axes("right", size=0.2, pad=0.4)
 cax_s = divider.append_axes("right", size=0.2, pad=0.7)
-stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
-background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
+if fix_color == 0:
+    stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
+    background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
+if fix_color == 1:
+    stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
+    background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
 if m != 0:
     mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
 cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
@@ -99,7 +106,7 @@ ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
 
-def animation_frame(frame, X, Y, U, V, P, t, a, b, m):
+def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color):
     # Clear lines, arrowheads and colorbar
     global cbar_s, cbar_b, background, mask
     cbar_s.remove()
@@ -119,8 +126,12 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m):
     divider = make_axes_locatable(ax)
     cax_b = divider.append_axes("right", size=0.2, pad=0.4)
     cax_s = divider.append_axes("right", size=0.2, pad=0.7)
-    stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
-    background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
+    if fix_color == 0:
+        stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
+        background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
+    if fix_color == 1:
+        stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
+        background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
     if m != 0:
         mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
     cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
@@ -130,7 +141,7 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m):
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f} / {t[-1]}')
     return stream, cbar_s, cbar_b, background
 
-animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m)) # interval=2*dt*1000
+animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color)) # interval=2*dt*1000
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
 plt.show()
 
