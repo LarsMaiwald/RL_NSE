@@ -83,7 +83,7 @@ int main()
     Grid shape(i_max, j_max, 0, 0);
 
 
-    if(bc[0] == 2 || bc[1] == 2 || bc[2] == 2 || bc[3] == 2){
+    if((bc[0] == 2 && v_in != 0) || (bc[1] == 2 && u_in != 0) || (bc[2] == 2 && v_in != 0) || (bc[3] == 2 && u_in != 0)){
         grid_init_val(u, u_in);
         grid_init_val(v, v_in);
     }

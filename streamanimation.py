@@ -106,9 +106,10 @@ ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
 
-def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color):
+def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
     # Clear lines, arrowheads and colorbar
     global cbar_s, cbar_b, background, mask
+    print(f'{frame}/{counter_max}')
     cbar_s.remove()
     cbar_b.remove()
     background.remove()
@@ -141,7 +142,7 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color):
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f} / {t[-1]}')
     return stream, cbar_s, cbar_b, background
 
-animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color)) # interval=2*dt*1000
+animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color, counter_max)) # interval=2*dt*1000
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
 plt.show()
 
