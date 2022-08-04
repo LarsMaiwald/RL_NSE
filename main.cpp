@@ -138,7 +138,7 @@ int main()
         int k = 0;
         while(!check){
             k += 1;
-            if(k == int(SOR_max_iter/(i_max*j_max))){
+            if(k == int(SOR_max_iter*i_max*j_max)){
                 cout << "SOR did not converge in given number of steps. \n";
                 cout << "Stopping simulation. \n";
                 exit(1);
