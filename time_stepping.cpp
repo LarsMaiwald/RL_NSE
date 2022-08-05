@@ -104,5 +104,7 @@ float get_gamma(Grid &u, Grid &v, float dx, float dy, float dt, float pre){
     float m1 = grid_max_abs(u);
     float m2 = grid_max_abs(v);
     float gamma = (1 + pre)*max(m1*dt/dx, m2*dt/dy);
+    if(gamma < 0){gamma = 0;}
+    if(gamma > 1){gamma = 1;}
     return gamma;
 }
