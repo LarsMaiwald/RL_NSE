@@ -60,21 +60,32 @@ for k in range(len(analytRes_Arr_temp)):
 
 outpath = "../testing_derivatives/plots"
 
-fig, ax = plt.subplots(1, 2, figsize= (7, 3.5))        # generate figure with axes
-ax[0].pcolormesh(x, y, numRes_Arr[0])    # initialize plot
-ax[1].pcolormesh(x, y, analytRes_Arr[0])
+fig, ax = plt.subplots(1, 2, figsize= (9, 3.5))        # generate figure with axes
+bax = ax[0].inset_axes([1.1, 0, 0.05, 1], transform=ax[0].transAxes)
+bax.axis('off')
+cax = ax[1].inset_axes([1.1, 0, 0.05, 1], transform=ax[1].transAxes) # Colorbar is held by
+im = ax[0].pcolormesh(x, y, numRes_Arr[0])    # initialize plot
+im = ax[1].pcolormesh(x, y, analytRes_Arr[0])
+ax[0].set_title('Numerical solution')
+ax[1].set_title('Analytical solution')
 for i in range(2):
     ax[i].set_xlabel('x')
     ax[i].set_ylabel('y')
-fig.suptitle(strRes_Arr[0], fontsize=14)
-fig.tight_layout()
+fig.suptitle(strRes_Arr[0], fontsize=15)
+cb = fig.colorbar(im, ax=ax, cax=cax)
+plt.tight_layout()
 plt.draw()
 fig.savefig(os.path.join(outpath,"comparison_0.png"))
 
+
 for i in range(1, len(numRes_Arr)):
-    ax[0].pcolormesh(x, y, numRes_Arr[i])
-    ax[1].pcolormesh(x, y, analytRes_Arr[i])
+    cax.clear()
+    im = ax[0].pcolormesh(x, y, numRes_Arr[i])
+    im = ax[1].pcolormesh(x, y, analytRes_Arr[i])
+    ax[0].set_title('Numerical solution')
+    ax[1].set_title('Analytical solution')
     fig.suptitle(strRes_Arr[i], fontsize=14)
-    fig.tight_layout()
+    cb = fig.colorbar(im, ax=ax, cax=cax)
+    plt.tight_layout()
     plt.draw()
     fig.savefig(os.path.join(outpath,"comparison_{0}.png".format(i)), dpi=200)
