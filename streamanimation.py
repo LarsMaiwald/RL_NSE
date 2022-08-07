@@ -61,11 +61,13 @@ def load_and_adjust(counter, U, V, P):
 
 if fix_color == 1:
     # finding pressure and velocity min and max
+    print('Analyzing data to find minimum and maximum velocity…')
     P_min = 0
     P_max = 0
     speed_min = 0
     speed_max = 0
     for i in range(1, counter_max+1):
+        print(f'{i}/{counter_max}')
         U, V, P = load_and_adjust(i, U, V, P)
         speed = np.sqrt(U**2 + V**2)
         P_min = np.min([P_min, np.min(P)])
@@ -74,6 +76,8 @@ if fix_color == 1:
         speed_max = np.max([speed_max, np.max(speed)])
     norm_s = Normalize(speed_min, speed_max)
     norm_b = Normalize(P_min, P_max)
+    
+print('Computing animation frames…')
     
 U, V, P = load_and_adjust(1, U, V, P)
 
