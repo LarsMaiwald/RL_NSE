@@ -81,6 +81,7 @@ bool tolerance_check(Grid &r, Grid &p_init, float eps, int norm, float chi){
         cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\r";
         check = (L2_norm(r) < eps*L2_norm(p_init) + chi);
     }
+    if(check){cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\n"; }
     return check;
 }
 
