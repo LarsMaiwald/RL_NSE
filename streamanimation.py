@@ -148,5 +148,5 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
 
 animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color, counter_max)) # interval=2*dt*1000
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
-plt.show()
+#plt.show()
 
