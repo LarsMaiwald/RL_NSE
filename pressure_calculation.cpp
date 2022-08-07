@@ -73,15 +73,25 @@ bool tolerance_check(Grid &r, Grid &p_init, float eps, int norm, float chi){
 //        cout << "max_norm(r) = " << max_norm(r) << "\n";
 //        cout << "eps*max_norm(p_init) = " << eps*max_norm(p_init) << "\n";
         cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\r";
-        check = (max_norm(r) < eps*max_norm(p_init) + chi);
+        if(max_norm(p_init) == 0){
+            check = (max_norm(r) < eps*max_norm(p_init) + chi);
+        }
+        else{
+            check = (max_norm(r) < eps*max_norm(p_init));
+        }
     }
     else if(norm == 1){ // L2_norm
 //        cout << "L2_norm(r)= " << L2_norm(r) << "\n";
 //        cout << "eps*L2_norm(p_init) = " << eps*L2_norm(p_init) << "\n";
         cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\r";
-        check = (L2_norm(r) < eps*L2_norm(p_init) + chi);
+        if(max_norm(p_init) == 0){
+            check = (L2_norm(r) < eps*L2_norm(p_init) + chi);
+        }
+        else{
+            check = (L2_norm(r) < eps*L2_norm(p_init));
+        }
     }
-    if(check){cout << "SOR: max_norm(r) = " << setprecision(6) << max_norm(r) << "\n"; }
+    if(check){cout << "SOR: final max_norm(r) = " << setprecision(6) << max_norm(r) << "\n"; }
     return check;
 }
 
