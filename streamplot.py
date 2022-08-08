@@ -68,10 +68,5 @@ ax.set_ylim(b,0)
 ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
-<<<<<<< HEAD
-fig.savefig('../RL_NSE/plots/streamplot.png', dpi=200)
-#plt.show()
-=======
 fig.savefig(f'../RL_NSE/plots/streamplot{output_num}.png', dpi=200)
 plt.show()
->>>>>>> 840a831 (adding number for output folder to enable running the simulation)

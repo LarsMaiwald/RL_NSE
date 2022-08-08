@@ -148,11 +148,6 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
     return stream, cbar_s, cbar_b, background
 
 animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color, counter_max)) # interval=2*dt*1000
-<<<<<<< HEAD
-animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
-#plt.show()
-=======
 animation.save(f'../RL_NSE/plots/anim{output_num}.mp4', dpi=200)
 plt.show()
->>>>>>> 840a831 (adding number for output folder to enable running the simulation)
 
