@@ -27,9 +27,10 @@ j_max = cfg.j_max
 m = cfg.shape_in_box
 lsl = cfg.lsl
 fix_color = cfg.fix_color
+output_num = cfg.output_num
 
-counter_max = int((len(os.listdir('../RL_NSE/outputs/')) - 1)/3 - 1)
-t = np.genfromtxt ('../RL_NSE/outputs/t_final.csv', delimiter=",")
+counter_max = int((len(os.listdir(f'../RL_NSE/outputs{output_num}/')) - 1)/3 - 1)
+t = np.genfromtxt (f'../RL_NSE/outputs{output_num}/t_final.csv', delimiter=",")
 s = str(t[-1])
 t_dec = len(s[s.rfind('.'):]) - 1
 
@@ -42,9 +43,9 @@ P = np.empty((j_max, i_max))
 def load_and_adjust(counter, U, V, P):
     # loading arrays
     counter = int(counter)
-    u = np.genfromtxt (f'../RL_NSE/outputs/u{counter}.csv', delimiter=",")
-    v = np.genfromtxt (f'../RL_NSE/outputs/v{counter}.csv', delimiter=",")
-    p = np.genfromtxt (f'../RL_NSE/outputs/p{counter}.csv', delimiter=",")
+    u = np.genfromtxt (f'../RL_NSE/outputs{output_num}/u{counter}.csv', delimiter=",")
+    v = np.genfromtxt (f'../RL_NSE/outputs{output_num}/v{counter}.csv', delimiter=",")
+    p = np.genfromtxt (f'../RL_NSE/outputs{output_num}/p{counter}.csv', delimiter=",")
     
     # adjusting stagered grid with averaging
     # the order of indexing is swapped here in comparison to the c++ code!!!
@@ -147,6 +148,11 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
     return stream, cbar_s, cbar_b, background
 
 animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color, counter_max)) # interval=2*dt*1000
+<<<<<<< HEAD
 animation.save('../RL_NSE/plots/anim.mp4', dpi=200)
 #plt.show()
+=======
+animation.save(f'../RL_NSE/plots/anim{output_num}.mp4', dpi=200)
+plt.show()
+>>>>>>> 840a831 (adding number for output folder to enable running the simulation)
 

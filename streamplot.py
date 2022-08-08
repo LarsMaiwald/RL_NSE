@@ -21,13 +21,14 @@ i_max = cfg.i_max
 j_max = cfg.j_max
 m = cfg.shape_in_box
 lsl = cfg.lsl
+output_num = cfg.output_num
 
-t = np.genfromtxt('../RL_NSE/outputs/t_final.csv', delimiter=',')
+t = np.genfromtxt(f'../RL_NSE/outputs{output_num}/t_final.csv', delimiter=',')
 
 # loading arrays
-u = np.genfromtxt('../RL_NSE/outputs/u_final.csv', delimiter=',')
-v = np.genfromtxt('../RL_NSE/outputs/v_final.csv', delimiter=',')
-p = np.genfromtxt('../RL_NSE/outputs/p_final.csv', delimiter=',')
+u = np.genfromtxt(f'../RL_NSE/outputs{output_num}/u_final.csv', delimiter=',')
+v = np.genfromtxt(f'../RL_NSE/outputs{output_num}/v_final.csv', delimiter=',')
+p = np.genfromtxt(f'../RL_NSE/outputs{output_num}/p_final.csv', delimiter=',')
 
 # initializing the grid and adjusting stagered grid with averaging
 X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
@@ -67,5 +68,10 @@ ax.set_ylim(b,0)
 ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
+<<<<<<< HEAD
 fig.savefig('../RL_NSE/plots/streamplot.png', dpi=200)
 #plt.show()
+=======
+fig.savefig(f'../RL_NSE/plots/streamplot{output_num}.png', dpi=200)
+plt.show()
+>>>>>>> 840a831 (adding number for output folder to enable running the simulation)

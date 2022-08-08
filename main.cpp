@@ -14,14 +14,14 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4];
+    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4], output_num;
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c, SOR_max_iter;
     bool in_c;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
     // Loading input from parameter file "config.cgf"
-    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c, SOR_max_iter);
+    load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c, SOR_max_iter, output_num);
 
     // Testing input parameters, grid creation and printing
 //    cout << "a = " << a << "\n";
@@ -58,7 +58,7 @@ int main()
 //    grid2file(p, "../RL_NSE/p.csv");
 
     // Cleaning output directory
-    system("rm ../RL_NSE/outputs/* || echo Output directory already empty.");
+    system(("rm ../RL_NSE/outputs" + to_string(output_num) + "/* || echo Output directory already empty.").c_str());
 
     // Creating all grids
     Grid p(i_max, j_max, 2, 2);
@@ -158,17 +158,17 @@ int main()
         // Output
         if((counter - 1) % save_step == 0){
             c += 1;
-            time2file(t, "../RL_NSE/outputs/t_final.csv");
-            grid2file(u, "../RL_NSE/outputs/u" + to_string(c) + ".csv");
-            grid2file(v, "../RL_NSE/outputs/v" + to_string(c) + ".csv");
-            grid2file(p, "../RL_NSE/outputs/p" + to_string(c) + ".csv");
+            time2file(t, "../RL_NSE/outputs" + to_string(output_num) + "/t_final.csv");
+            grid2file(u, "../RL_NSE/outputs" + to_string(output_num) + "/u" + to_string(c) + ".csv");
+            grid2file(v, "../RL_NSE/outputs" + to_string(output_num) + "/v" + to_string(c) + ".csv");
+            grid2file(p, "../RL_NSE/outputs" + to_string(output_num) + "/p" + to_string(c) + ".csv");
         }
     }
 
     // Final output
-    grid2file(u, "../RL_NSE/outputs/u_final.csv");
-    grid2file(v, "../RL_NSE/outputs/v_final.csv");
-    grid2file(p, "../RL_NSE/outputs/p_final.csv");
+    grid2file(u, "../RL_NSE/outputs" + to_string(output_num) + "/u_final.csv");
+    grid2file(v, "../RL_NSE/outputs" + to_string(output_num) + "/v_final.csv");
+    grid2file(p, "../RL_NSE/outputs" + to_string(output_num) + "/p_final.csv");
     cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps. \n";
 
     // debugging output
