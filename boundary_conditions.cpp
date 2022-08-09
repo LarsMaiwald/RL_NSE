@@ -158,6 +158,22 @@ void set_boundaries(Grid &u, Grid &v, float u_in, float v_in, int bc[4])
     bc_outflow(u, v, bc);
 }
 
+//void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string filename)
+//{
+//    file2grid(shape, "../RL_NSE/shapes/"+filename);
+//    for (int i = 0; i < i_max; i++)
+//    {
+//        for (int j = 0; j < j_max; j++)
+//        {
+//            if(shape.grid[i][j] != 0)
+//            {
+//                u.grid[i][j] = -u.grid[i+1][j];
+//                v.grid[i][j] = -v.grid[i][j+1];
+//            }
+//        }
+//    }
+//}
+
 void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string filename)
 {
     file2grid(shape, "../RL_NSE/shapes/"+filename);
@@ -165,10 +181,56 @@ void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string
     {
         for (int j = 0; j < j_max; j++)
         {
-            if(shape.grid[i][j] != 0)
+            if(shape.grid[i][j] == 255) // inside
             {
-                u.grid[i][j] = -u.grid[i+1][j];
-                v.grid[i][j] = -v.grid[i][j+1];
+                u.grid[i][j+1] = 0;
+                u.grid[i+1][j+1] = 0;
+                v.grid[i+1][j] = 0;
+                v.grid[i+1][j+1] = 0;
+            }
+            if(shape.grid[i][j] == 25) // N
+            {
+                u.grid[i][j+1] = 0;
+                u.grid[i+1][j+1] = 0;
+                v.grid[i+1][j-1] = -v.grid[i+1][j];
+            }
+            if(shape.grid[i][j] == 75) // W
+            {
+                u.grid[i+1][j+1] = -u.grid[i][j+1];
+                v.grid[i+1][j-1] = 0;
+                v.grid[i+1][j] = 0;
+            }
+            if(shape.grid[i][j] == 125) // S
+            {
+                u.grid[i][j+1] = 0;
+                u.grid[i+1][j+1] = 0;
+                v.grid[i+1][j] = -v.grid[i+1][j-1];
+            }
+            if(shape.grid[i][j] == 175) // E
+            {
+                u.grid[i][j+1] = -u.grid[i+1][j+1];
+                v.grid[i+1][j-1] = 0;
+                v.grid[i+1][j] = 0;
+            }
+            if(shape.grid[i][j] == 50) // NW
+            {
+                u.grid[i+1][j+1] = -u.grid[i][j+1];
+                v.grid[i+1][j-1] = -v.grid[i+1][j];
+            }
+            if(shape.grid[i][j] == 100) // SW
+            {
+                u.grid[i+1][j+1] = -u.grid[i][j+1];
+                v.grid[i+1][j] = -v.grid[i+1][j-1];
+            }
+            if(shape.grid[i][j] == 150) // SE
+            {
+                u.grid[i][j+1] = -u.grid[i+1][j+1];
+                v.grid[i+1][j] = -v.grid[i+1][j-1];
+            }
+            if(shape.grid[i][j] == 50) // NE
+            {
+                u.grid[i][j+1] = -u.grid[i+1][j+1];
+                v.grid[i+1][j-1] = -v.grid[i+1][j];
             }
         }
     }

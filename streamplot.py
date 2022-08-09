@@ -55,7 +55,7 @@ cax_s = divider.append_axes("right", size=0.2, pad=0.7)
 stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray')
 background = ax.imshow(P, extent=[0,a,0,b], origin='lower')
 if m != 0:
-    mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
+    mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}_{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
 cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
 cbar_b = fig.colorbar(background, cax=cax_b, label=r'$p$', orientation='vertical')
 cbar_s.formatter.set_powerlimits((0, 0))

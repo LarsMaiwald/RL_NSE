@@ -155,6 +155,12 @@ int main()
         // Compute the new velocity components u and v
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
 
+        // Additional boundary condition
+        if(shape_in_box != 0)
+        {
+            bc_shape_in_box(shape, u, v, i_max, j_max, to_string(shape_in_box)+".csv");
+        }
+
         // Output
         if((counter - 1) % save_step == 0){
             c += 1;
@@ -169,7 +175,7 @@ int main()
     grid2file(u, "../RL_NSE/outputs" + to_string(output_num) + "/u_final.csv");
     grid2file(v, "../RL_NSE/outputs" + to_string(output_num) + "/v_final.csv");
     grid2file(p, "../RL_NSE/outputs" + to_string(output_num) + "/p_final.csv");
-    cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps. \n";
+    cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps in folder outputs" + to_string(output_num) + ". \n";
 
     // debugging output
 //    grid2file(F, "../RL_NSE/outputs/F_final.csv");

@@ -97,7 +97,7 @@ if fix_color == 1:
     stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
     background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
 if m != 0:
-    mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
+    mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}_{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
 cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
 cbar_b = fig.colorbar(background, cax=cax_b, label=r'$p$', orientation='vertical')
 cbar_s.formatter.set_powerlimits((0, 0))
@@ -139,7 +139,7 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
         stream = ax.streamplot(X, Y, U, V, color=speed, density=2, cmap='gray', norm=norm_s)
         background = ax.imshow(P, extent=[0,a,0,b], origin='lower', norm=norm_b)
     if m != 0:
-        mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
+        mask = ax.imshow(mpimg.imread(f'../RL_NSE/shapes/{m}_{m}.png'), extent=[0,a,0,b], origin='lower', cmap='gray')
     cbar_s = fig.colorbar(stream.lines, cax=cax_s, label=r'$\sqrt{u^2 + v^2}$', orientation='vertical')
     cbar_b = fig.colorbar(background, cax=cax_b, label=r'$p$', orientation='vertical')
     cbar_s.formatter.set_powerlimits((0, 0))
