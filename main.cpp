@@ -100,7 +100,7 @@ int main()
         cout << "Starting time step " << counter << " at time " << t << " of " << t_final << "\n";
 
         // Adjusting inflow velocities periodically
-        if(in_c)
+        if(in_c == 1)
         {
             inflow_change(u_in_c, v_in_c, u_in, v_in, t);
         }
