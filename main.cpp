@@ -110,7 +110,7 @@ int main()
         t += dt;
 
         // Filling ghost cells according to boundary condition
-        set_boundaries(u, v, u_in, v_in, bc);
+        set_boundaries(u, v, u_in_c, v_in_c, bc);
 
         // Additional boundary condition
         if(shape_in_box != 0)
