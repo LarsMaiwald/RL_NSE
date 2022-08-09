@@ -10,7 +10,7 @@ using namespace libconfig;
 
 
 // Loading parameter file using libconfig
-int load_config(float &a, float &b, int &i_max, int &j_max, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step, int &shape_in_box, int bc[4], bool &in_c, float &SOR_max_iter, int &output_num)
+int load_config(float &a, float &b, int &i_max, int &j_max, float &u_in, float &v_in, float &Re, float &tau, float &g_x, float &g_y, float &w, float &eps, int &norm, float &pre, float &t_final, float &chi, int &save_step, int &shape_in_box, int bc[4], int &in_c, float &SOR_max_iter, int &output_num)
 {   
     Config cfg;
 

@@ -14,9 +14,8 @@ using namespace std;
 int main()
 {
     // Initialization
-    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4], output_num;
+    int i_max, j_max, boundary_condition, norm, save_step, shape_in_box, bc[4], output_num, in_c;
     float a, b, Re, tau, g_x, g_y, u_in, v_in, w, eps, pre, t_final, chi, u_in_c, v_in_c, SOR_max_iter;
-    bool in_c;
 
     cout << "Numerical Solution of the Navier-Stokes Equations (Research Lab, TPI Jena) by Lars Maiwald and Kevin Siebert" << "\n";
 
