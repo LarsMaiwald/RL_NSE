@@ -3,7 +3,7 @@
 #include "Grid.h"
 using namespace std;
 
-// Initialization of grid (a x b) values with predefined example function
+// // Initializaion of grid points for test function of u
 void grid_init(Grid &u, float x[], float y[])
 {
     for (int i = 0; i < u.i_max + u.i_g; i++) {
@@ -13,6 +13,7 @@ void grid_init(Grid &u, float x[], float y[])
     }
 }
 
+// Initializaion of grid points for test function of v
 void grid_init2(Grid &u, float x[], float y[])
 {
     for (int i = 0; i < u.i_max + u.i_g; i++) {
@@ -22,6 +23,7 @@ void grid_init2(Grid &u, float x[], float y[])
     }
 }
 
+// Initialization for x and y
 float xy_init(float x[], int i_max, float x_min, float x_max)
 {
   float dx = abs(x_max-x_min)/i_max;

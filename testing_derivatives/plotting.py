@@ -7,7 +7,7 @@ from tqdm import tqdm
 from matplotlib.colors import Normalize
 import matplotlib.cm as cm
 
-# loading parameter file
+# Loading parameter file
 cfg = load_cfg('../testing_derivatives/config.cfg')
 i_max = cfg.i_max
 j_max = cfg.j_max
@@ -16,7 +16,7 @@ x_max = cfg.x_max
 y_min = cfg.y_min
 y_max = cfg.y_max
 
-# loading arrays calculated in C++
+# Loading arrays calculated in C++
 u = np.genfromtxt ('../testing_derivatives/outputs/u.csv', delimiter=",")
 v = np.genfromtxt ('../testing_derivatives/outputs/v.csv', delimiter=",")
 d2udx2 = np.genfromtxt ('../testing_derivatives/outputs/d2udx2.csv', delimiter=",")
@@ -30,10 +30,10 @@ dv2dy = np.genfromtxt ('../testing_derivatives/outputs/dv2dy.csv', delimiter=","
 x = np.genfromtxt ('../testing_derivatives/outputs/x.csv', delimiter=",")
 y = np.genfromtxt ('../testing_derivatives/outputs/y.csv', delimiter=",")
 
-# put into Array for Plotting
+# Put into array for plotting
 numRes_Arr = [u, v, d2udx2, d2udy2, d2vdx2, d2vdy2, du2dx, dv2dy, duvdx, duvdy]
 
-# calculate analytical derivative using sympy
+# Calculate analytical derivative using sympy
 X = sy.symbols('X')
 Y = sy.symbols('Y')
 U = 2*sy.cos(X)+ 3*sy.sin(Y)
@@ -47,12 +47,12 @@ D2VDY2 = sy.diff(V, Y, Y)
 DUVDX = sy.diff(U*V, X)
 DV2DY = sy.diff(V**2, Y)
 
-# put into Array for Plotting
+# Put into array for plotting
 analytRes_Arr_temp = [U, V, D2UDX2, D2UDY2, D2VDX2, D2VDY2, DU2DX, DV2DY, DUVDX, DUVDY]
 analytRes_Arr = []
 strRes_Arr = [r'$u$', r'$v$', r'$\frac{\partial^2 u}{\partial x^2}$', r'$\frac{\partial^2 u}{\partial y^2}$', r'$\frac{\partial^2 v}{\partial x^2}$', r'$\frac{\partial^2 v}{\partial y^2}$', r'$\frac{\partial u^2}{\partial x}$', r'$\frac{\partial v^2}{\partial y}$', r'$\frac{\partial uv}{\partial x}$', r'$\frac{\partial uv}{\partial y}$']
 
-# turn sympy expressions into callable functions
+# Turn sympy expressions into callable functions
 for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr_temp[k] = sy.lambdify([X,Y], analytRes_Arr_temp[k], "numpy")
     temp = np.zeros((len(x), len(y)))
@@ -61,10 +61,10 @@ for k in range(len(analytRes_Arr_temp)):
             temp[i,j] = analytRes_Arr_temp[k](x[i], y[j])
     analytRes_Arr.append(temp)
 
-# set path for saving plots
+# Set path for saving plots
 outpath = "../testing_derivatives/plots"
 
-# initialize figure
+# Initialize figure
 fig, ax = plt.subplots(1, 2, figsize= (9, 3.5))        # generate figure with axes
 bax = ax[0].inset_axes([1.1, 0, 0.05, 1], transform=ax[0].transAxes)
 bax.axis('off')
@@ -72,7 +72,7 @@ cax = ax[1].inset_axes([1.1, 0, 0.05, 1], transform=ax[1].transAxes) # Colorbar 
 
 for i in tqdm(range(0, len(numRes_Arr))):
 
-    # calculate max and min for colormap nomalization
+    # Calculate max and min for colormap nomalization
     cax.clear()
     maxArr = []
     maxArr.append(np.amax(numRes_Arr[i]))
@@ -86,7 +86,7 @@ for i in tqdm(range(0, len(numRes_Arr))):
     normalizer=Normalize(cbmin,cbmax)
     im=cm.ScalarMappable(norm=normalizer)
 
-    # drawing of colormesh-plots
+    # Drawing of colormesh-plots
     ax[0].pcolormesh(x, y, numRes_Arr[i], norm=normalizer)
     ax[1].pcolormesh(x, y, analytRes_Arr[i], norm=normalizer)
     ax[0].set_title('Numerical solution')
@@ -96,5 +96,5 @@ for i in tqdm(range(0, len(numRes_Arr))):
     plt.tight_layout()
     plt.draw()
 
-    # saving the figure as png
+    # Saving the figure as png
     fig.savefig(os.path.join(outpath,"comparison_{0}.png".format(i)), dpi=200)

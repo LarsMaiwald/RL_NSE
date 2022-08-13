@@ -16,7 +16,7 @@ using namespace std;
 int main()
 {
 
-    // Initializatio
+    // Initialization
     int i_max;
     int j_max;
     float x_max;
@@ -27,7 +27,7 @@ int main()
     // Loading parameter file
     load_config(i_max, j_max, x_min, x_max, y_min, y_max);
 
-    // Creating all grid
+    // Creating all grids
     float dx;
     float dy;
     float gamma;
@@ -44,20 +44,22 @@ int main()
     Grid duvdx(i_max, j_max, 2, 2);
     Grid dv2dy(i_max, j_max, 2, 2);
 
+    // Load parameters from config file
     load_config(i_max, j_max, x_min, x_max, y_min, y_max);
 
-
+    // calculate grid spacing
     dx = xy_init(x, i_max, x_min, x_max);
     dy = xy_init(y, j_max, y_min, y_max);
 
-
+    // Initialize grid-points with the given test functions
     grid_init(u, x, y);
     grid_init2(v, x, y);
     gamma = get_gamma(u, v, dx, dy, 0.001, 0.1);
 
+    // Calulation of the derivative stencils
     derivative_stencils(u, v, d2udx2, d2udy2, du2dx, duvdy, d2vdx2, d2vdy2, duvdx, dv2dy, dx, dy, gamma);
-    // Final output
-//    cout << "Outputting grids \n";
+
+    // Saving results to output folder
     array2file(x, i_max, "../testing_derivatives/outputs/x.csv");
     array2file(y, j_max, "../testing_derivatives/outputs/y.csv");
     grid2file(u, "../testing_derivatives/outputs/u.csv");
