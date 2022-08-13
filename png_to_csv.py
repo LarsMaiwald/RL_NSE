@@ -6,12 +6,16 @@ Created on Thu Jul 28 14:53:56 2022
 @author: lars
 """
 
+# importing libraries
 import imageio as iio
 import numpy as np
 from load_cfg import load_cfg
 
+# loading config
 cfg = load_cfg('../RL_NSE/config.cfg')
 filename = cfg.shape_in_box
+
+# png to csv conversion
 if filename != 0:
     img = iio.v2.imread(f'shapes/{filename}.png')[:,:,2]
     np.savetxt(f'shapes/{filename}.csv', img, delimiter=',', fmt='%.d')

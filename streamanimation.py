@@ -29,6 +29,7 @@ lsl = cfg.lsl
 fix_color = cfg.fix_color
 output_num = cfg.output_num
 
+# determining number of files and loading their times
 counter_max = int((len(os.listdir(f'../RL_NSE/outputs{output_num}/')) - 1)/3 - 1)
 t = np.genfromtxt (f'../RL_NSE/outputs{output_num}/t_final.csv', delimiter=",")
 s = str(t[-1])
@@ -40,6 +41,7 @@ U = np.empty((j_max, i_max))
 V = np.empty((j_max, i_max))
 P = np.empty((j_max, i_max))
 
+# function for loading u,v,p at given timestep inputet as a int counter and adjusting stagered grid with averaging
 def load_and_adjust(counter, U, V, P):
     # loading arrays
     counter = int(counter)
@@ -59,16 +61,15 @@ def load_and_adjust(counter, U, V, P):
     P = p[1:-1, 1:-1]
     return U, V, P
 
-
+# finding pressure and velocity min and max if colorbars should be fixed
 if fix_color == 1:
-    # finding pressure and velocity min and max
     print('Analyzing data to find minimum and maximum velocity…')
     P_min = 0
     P_max = 0
     speed_min = 0
     speed_max = 0
     for i in range(1, counter_max+1):
-        print(f'{i}/{counter_max}')
+        print(f'{i}/{counter_max}') # progress information
         U, V, P = load_and_adjust(i, U, V, P)
         speed = np.sqrt(U**2 + V**2)
         P_min = np.min([P_min, np.min(P)])
@@ -77,13 +78,15 @@ if fix_color == 1:
         speed_max = np.max([speed_max, np.max(speed)])
     norm_s = Normalize(speed_min, speed_max)
     norm_b = Normalize(P_min, P_max)
-    
+
+# progress information
 print('Computing animation frames…')
-    
+
+# loading and adjusting u,v,p at initial timestep
 U, V, P = load_and_adjust(1, U, V, P)
 
+# calculating speed
 speed = np.sqrt(U**2 + V**2)
-# lw = 5*speed/np.max(speed)
 
 # plotting
 fig, ax = plt.subplots(figsize=(6*(a/b)**0.6,4))
@@ -111,10 +114,11 @@ ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top')
 fig.tight_layout()
 
+# function for animation using FuncAnimation
 def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
-    # Clear lines, arrowheads and colorbar
+    # Clear lines, arrowheads, colorbars and background
     global cbar_s, cbar_b, background, mask
-    print(f'{frame}/{counter_max}')
+    print(f'{frame}/{counter_max}') # progress information
     cbar_s.remove()
     cbar_b.remove()
     background.remove()
@@ -125,10 +129,14 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
             artist.remove()
         if isinstance(artist, LineCollection):
             artist.remove()
+            
     # update frame
     U, V, P = load_and_adjust(frame, U, V, P)
+    
+    #calculate new speed
     speed = np.sqrt(U**2 + V**2)
-    # lw = 5*speed/np.max(speed)
+    
+    #plotting
     divider = make_axes_locatable(ax)
     cax_b = divider.append_axes("right", size=0.2, pad=0.4)
     cax_s = divider.append_axes("right", size=0.2, pad=0.7)
@@ -147,6 +155,7 @@ def animation_frame(frame, X, Y, U, V, P, t, a, b, m, fix_color, counter_max):
     text.set_text(f'time: {t[int(frame-1)]:.{t_dec}f} / {t[-1]}')
     return stream, cbar_s, cbar_b, background
 
+# rendering and outputting animation
 animation = FuncAnimation(fig, func=animation_frame, frames=np.arange(1,counter_max+1,1), interval=int(1000*t[-1]/counter_max), fargs=(X, Y, U, V, P, t, a, b, m, fix_color, counter_max)) # interval=2*dt*1000
 animation.save(f'../RL_NSE/plots/anim{output_num}.mp4', dpi=200)
 plt.show()

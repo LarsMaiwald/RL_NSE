@@ -23,16 +23,15 @@ m = cfg.shape_in_box
 lsl = cfg.lsl
 output_num = cfg.output_num
 
-t = np.genfromtxt(f'../RL_NSE/outputs{output_num}/t_final.csv', delimiter=',')
-
 # loading arrays
+t = np.genfromtxt(f'../RL_NSE/outputs{output_num}/t_final.csv', delimiter=',')
 u = np.genfromtxt(f'../RL_NSE/outputs{output_num}/u_final.csv', delimiter=',')
 v = np.genfromtxt(f'../RL_NSE/outputs{output_num}/v_final.csv', delimiter=',')
 p = np.genfromtxt(f'../RL_NSE/outputs{output_num}/p_final.csv', delimiter=',')
 
 # initializing the grid and adjusting stagered grid with averaging
-X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
 # the order of indexing is swapped here in comparison to the c++ code!!!
+X, Y = np.meshgrid(np.linspace(0, a, i_max), np.linspace(0, b, j_max))
 U = np.empty((j_max, i_max))
 V = np.empty((j_max, i_max))
 for i in range(i_max):
@@ -44,8 +43,8 @@ for i in range(i_max):
             V[j][i] = 0
 P = p[1:-1, 1:-1]
 
+# calculating speed
 speed = np.sqrt(U**2 + V**2)
-# lw = 5*speed/np.max(speed) # remove that line
 
 # plotting
 fig, ax = plt.subplots(figsize=(6*(a/b)**0.6,4))
