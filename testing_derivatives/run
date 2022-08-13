@@ -1,4 +1,10 @@
 #!/bin/bash
+cmake .
+
+mkdir -p outputs
+
+mkdir -p plots
+
 rm outputs/*
 
 make

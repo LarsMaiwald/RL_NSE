@@ -1,4 +1,12 @@
 #!/bin/bash
+cmake .
+
+mkdir -p outputs0
+
+mkdir -p plots
+
+rm outputs0/*
+
 make
 
 ./RL_NSE
