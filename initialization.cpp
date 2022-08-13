@@ -3,7 +3,7 @@
 #include "Grid.h"
 using namespace std;
 
-// Initialization of grid (a x b) values with predefined example function
+// Initialization of grid values with predefined example function
 void grid_init_cos_sin(Grid &u, int a, int b)
 {
     for (int i = 1; i < u.i_max + u.i_g - 1; i++) {
@@ -13,6 +13,7 @@ void grid_init_cos_sin(Grid &u, int a, int b)
     }
 }
 
+// Initialization of all grid values to one constant
 void grid_init_val(Grid &u, float val)
 {
     for (int i = 1; i < u.i_max + u.i_g - 1; i++) {

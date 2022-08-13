@@ -2,30 +2,31 @@
 #include <algorithm>
 #include <math.h>
 #include "Grid.h"
-
 using namespace std;
 
+// Find the maximum value of a grid
 float grid_max(Grid &a){
     float grid_max = a.grid[0][0];
-    for(int i = 0; i < a.i_max + a.i_g; i++){ // is the range correct?
-        for(int j = 0; j < a.j_max + a.j_g; j++){ // is the range correct?
+    for(int i = 0; i < a.i_max + a.i_g; i++){
+        for(int j = 0; j < a.j_max + a.j_g; j++){
             grid_max = max(grid_max, a.grid[i][j]);
         }
     }
     return grid_max;
 }
 
+// Find the maximum absolute value of a grid
 float grid_max_abs(Grid &a){
     float grid_max = abs(a.grid[0][0]);
-    for(int i = 0; i < a.i_max + a.i_g; i++){ // is the range correct?
-        for(int j = 0; j < a.j_max + a.j_g; j++){ // is the range correct?
+    for(int i = 0; i < a.i_max + a.i_g; i++){
+        for(int j = 0; j < a.j_max + a.j_g; j++){
             grid_max = max(grid_max, abs(a.grid[i][j]));
         }
     }
     return grid_max;
 }
 
-// Is it correct with max(abs(u)) or should it be abs(max(u))?
+// Compute the timestep
 float time_step(Grid &u, Grid &v, float tau, float Re, float dx, float dy){
     float v1 = Re/(2*(1/(dx*dx) + 1/(dy*dy)));
     float v2 = dx/grid_max_abs(u);
@@ -34,44 +35,47 @@ float time_step(Grid &u, Grid &v, float tau, float Re, float dx, float dy){
     return dt;
 }
 
+// Update u and v using forward Euler method
 void iterate(Grid &u, Grid &v, Grid &F, Grid &G, Grid &dpdx, Grid &dpdy, float tau, int Re, float dx, float dy, float dt){
-    for(int i = 1; i < u.i_max; i++){ // is the range correct?
-        for(int j = 1; j < u.j_max + 1; j++){ // is the range correct?
+    for(int i = 1; i < u.i_max; i++){
+        for(int j = 1; j < u.j_max + 1; j++){
             u.grid[i][j] = F.grid[i][j] - dt*dpdx.grid[i][j];
         }
     }
-    for(int i = 1; i < v.i_max + 1; i++){ // is the range correct?
-        for(int j = 1; j < v.j_max; j++){ // is the range correct?
+    for(int i = 1; i < v.i_max + 1; i++){
+        for(int j = 1; j < v.j_max; j++){
             v.grid[i][j] = G.grid[i][j] - dt*dpdy.grid[i][j];
         }
     }
 }
 
+// Compute F and G
 void F_and_G(Grid &F, Grid &G, Grid &u, Grid &v, Grid &d2udx2, Grid &d2udy2, Grid &du2dx, Grid &duvdy, Grid &d2vdx2, Grid &d2vdy2, Grid &duvdx, Grid &dv2dy, float dt, float Re, float g_x, float g_y){
-    for(int i = 1; i < F.i_max; i++){ // is the range correct?
-        for(int j = 1; j < F.j_max + 1; j++){ // is the range correct?
+    for(int i = 1; i < F.i_max; i++){
+        for(int j = 1; j < F.j_max + 1; j++){
             F.grid[i][j] = u.grid[i][j] + dt*((d2udx2.grid[i][j] + d2udy2.grid[i][j])/Re - du2dx.grid[i][j] - duvdy.grid[i][j] + g_x);
         }
     }
-    for(int i = 1; i < G.i_max + 1; i++){ // is the range correct?
-        for(int j = 1; j < G.j_max; j++){ // is the range correct?
+    for(int i = 1; i < G.i_max + 1; i++){
+        for(int j = 1; j < G.j_max; j++){
             G.grid[i][j] = v.grid[i][j] + dt*((d2vdx2.grid[i][j] + d2vdy2.grid[i][j])/Re - duvdx.grid[i][j] - dv2dy.grid[i][j] + g_y);
         }
     }
     // setting necessary boundaries (missing in the manual, but can be found in Griebel et al. 1998, p. 36)
-    for(int j = 1; j < F.j_max + 1; j++){ // is the range correct?
+    for(int j = 1; j < F.j_max + 1; j++){
         F.grid[0][j] = u.grid[0][j];
         F.grid[F.i_max][j] = u.grid[u.i_max][j];
     }
-    for(int i = 1; i < G.i_max + 1; i++){ // is the range correct?
+    for(int i = 1; i < G.i_max + 1; i++){
         G.grid[i][0] = v.grid[i][0];
         G.grid[i][G.j_max] = v.grid[i][v.j_max];
     }
 }
 
+// Compute all needed derivative stencils for u and v
 void derivative_stencils(Grid &u, Grid &v, Grid &d2udx2, Grid &d2udy2, Grid &du2dx, Grid &duvdy, Grid &d2vdx2, Grid &d2vdy2, Grid &duvdx, Grid &dv2dy, float dx, float dy, float gamma){
-    for(int i = 1; i < u.i_max; i++){ // is the range correct?
-        for(int j = 1; j < u.j_max + 1; j++){ // is the range correct?
+    for(int i = 1; i < u.i_max; i++){
+        for(int j = 1; j < u.j_max + 1; j++){
             // second derivatives of the linear terms
             d2udx2.grid[i][j] = (u.grid[i+1][j] - 2*u.grid[i][j] + u.grid[i-1][j])/(dx*dx);
             d2udy2.grid[i][j] = (u.grid[i][j+1] - 2*u.grid[i][j] + u.grid[i][j-1])/(dy*dy);
@@ -84,8 +88,8 @@ void derivative_stencils(Grid &u, Grid &v, Grid &d2udx2, Grid &d2udy2, Grid &du2
                     + gamma*(abs(v.grid[i][j] + v.grid[i+1][j])*(u.grid[i][j] - u.grid[i][j+1])/4 - abs(v.grid[i][j-1] + v.grid[i+1][j-1])*(u.grid[i][j-1] - u.grid[i][j])/4)/dy;
         }
     }
-    for(int i = 1; i < v.i_max + 1; i++){ // is the range correct?
-        for(int j = 1; j < v.j_max; j++){ // is the range correct?
+    for(int i = 1; i < v.i_max + 1; i++){
+        for(int j = 1; j < v.j_max; j++){
             // second derivatives of the linear terms
             d2vdx2.grid[i][j] = (v.grid[i+1][j] - 2*v.grid[i][j] + v.grid[i-1][j])/(dx*dx);
             d2vdy2.grid[i][j] = (v.grid[i][j+1] - 2*v.grid[i][j] + v.grid[i][j-1])/(dy*dy);
@@ -100,6 +104,7 @@ void derivative_stencils(Grid &u, Grid &v, Grid &d2udx2, Grid &d2udy2, Grid &du2
     }
 }
 
+// Compute gamma and make sure it is in the interval [0,1]
 float get_gamma(Grid &u, Grid &v, float dx, float dy, float dt, float pre){
     float m1 = grid_max_abs(u);
     float m2 = grid_max_abs(v);

@@ -4,7 +4,6 @@
 #include "Grid.h"
 #include "input_output.h"
 #include "initialization.h"
-#include "memory_management.h"
 #include "time_stepping.h"
 #include "pressure_calculation.h"
 #include "boundary_conditions.h"
@@ -21,40 +20,6 @@ int main()
 
     // Loading input from parameter file "config.cgf"
     load_config(a, b, i_max, j_max, u_in, v_in, Re, tau, g_x, g_y, w, eps, norm, pre, t_final, chi, save_step, shape_in_box, bc, in_c, SOR_max_iter, output_num);
-
-    // Testing input parameters, grid creation and printing
-//    cout << "a = " << a << "\n";
-//    cout << "b = " << a << "\n";
-//    cout << "i_max = " << i_max << "\n";
-//    cout << "j_max = " << j_max << "\n";
-//    cout << "boundary_condition = " << boundary_condition << "\n";
-//    cout << "u_in = " << u_in << "\n";
-//    cout << "v_in = " << v_in << "\n";
-//    cout << "Re = " << Re << "\n";
-//    cout << "tau = " << tau << "\n";
-//    cout << "g_x = " << g_x << "\n";
-//    cout << "g_y = " << g_y << "\n";
-//    cout << "w = " << w << "\n";
-//    cout << "eps = " << eps << "\n";
-//    cout << "norm = " << norm << "\n";
-//    cout << "pre = " << pre << "\n";
-//    cout << "t_final = " << t_final << "\n";
-//    cout << "chi = " << chi << "\n";
-//    cout << "save_step = " << save_step << "\n";
-//    cout << "shape_in_box = " << shape_in_box << "\n";
-//    cout << "\n";
-//    Grid u(i_max, j_max, 1, 2);
-//    Grid v(i_max, j_max, 2, 1);
-//    Grid p(i_max, j_max, 2, 2);
-//    u.print();
-//    cout << "\n";
-//    grid_init(u, a, b);
-//    grid_init(v, a, b);
-//    grid_init(p, a, b);
-//    u.print();
-//    grid2file(u, "../RL_NSE/u.csv");
-//    grid2file(v, "../RL_NSE/v.csv");
-//    grid2file(p, "../RL_NSE/p.csv");
 
     // Cleaning output directory
     system(("rm ../RL_NSE/outputs" + to_string(output_num) + "/* || echo Output directory already empty.").c_str());
@@ -81,11 +46,13 @@ int main()
     Grid dv2dy(i_max, j_max, 2, 1);
     Grid shape(i_max, j_max, 0, 0);
 
-
+    // If there is orthogonal inflow, intialize the velocities correspondingly
     if((bc[0] == 2 && v_in != 0) || (bc[1] == 2 && u_in != 0) || (bc[2] == 2 && v_in != 0) || (bc[3] == 2 && u_in != 0)){
         grid_init_val(u, u_in);
         grid_init_val(v, v_in);
     }
+
+    // Making a copy of u_in and v_in
     u_in_c = u_in;
     v_in_c = v_in;
 
@@ -99,20 +66,22 @@ int main()
         counter += 1;
         cout << "Starting time step " << counter << " at time " << t << " of " << t_final << "\n";
 
-        // Adjusting inflow velocities periodically
+        // Adjusting inflow velocities periodically if in_c = 1
         if(in_c == 1)
         {
             inflow_change(u_in_c, v_in_c, u_in, v_in, t);
         }
 
         // Choosing time step
-        float dt = time_step(u, v, tau, Re, dx, dy); // Should this be after the boundary conditions?
+        float dt = time_step(u, v, tau, Re, dx, dy);
+
+        // Incrementing simulation time
         t += dt;
 
-        // Filling ghost cells according to boundary condition
+        // Applying the boundary conditions to u and v
         set_boundaries(u, v, u_in_c, v_in_c, bc);
 
-        // Additional boundary condition
+        // Additional boundary condition for an obstacle
         if(shape_in_box != 0)
         {
             bc_shape_in_box(shape, u, v, i_max, j_max, to_string(shape_in_box)+".csv");
@@ -134,6 +103,7 @@ int main()
             }
         }
 
+        // Exit program when SOR does not converge in given number of steps
         int k = 0;
         while(!check){
             k += 1;
@@ -154,13 +124,13 @@ int main()
         // Compute the new velocity components u and v
         iterate(u, v, F, G, dpdx, dpdy, tau, Re, dx, dy, dt);
 
-        // Additional boundary condition
+        // Additional boundary condition for an obstacle
         if(shape_in_box != 0)
         {
             bc_shape_in_box(shape, u, v, i_max, j_max, to_string(shape_in_box)+".csv");
         }
 
-        // Output
+        // Output every save_step iterations
         if((counter - 1) % save_step == 0){
             c += 1;
             time2file(t, "../RL_NSE/outputs" + to_string(output_num) + "/t_final.csv");
@@ -175,19 +145,4 @@ int main()
     grid2file(v, "../RL_NSE/outputs" + to_string(output_num) + "/v_final.csv");
     grid2file(p, "../RL_NSE/outputs" + to_string(output_num) + "/p_final.csv");
     cout << "Every " << save_step << "th time step was saved, which results in a total of " << c + 1 << " saved time steps in folder outputs" + to_string(output_num) + ". \n";
-
-    // debugging output
-//    grid2file(F, "../RL_NSE/outputs/F_final.csv");
-//    grid2file(G, "../RL_NSE/outputs/G_final.csv");
-//    grid2file(d2udx2, "../RL_NSE/outputs/d2udx2_final.csv");
-//    grid2file(d2udy2, "../RL_NSE/outputs/d2udy2_final.csv");
-//    grid2file(du2dx, "../RL_NSE/outputs/du2dx_final.csv");
-//    grid2file(duvdy, "../RL_NSE/outputs/duvdy_final.csv");
-//    grid2file(d2vdx2, "../RL_NSE/outputs/d2vdx2_final.csv");
-//    grid2file(d2vdy2, "../RL_NSE/outputs/d2vdy2_final.csv");
-//    grid2file(duvdx, "../RL_NSE/outputs/duvdx_final.csv");
-//    grid2file(dv2dy, "../RL_NSE/outputs/dv2dy_final.csv");
-//    grid2file(dpdx, "../RL_NSE/outputs/dpdx_final.csv");
-//    grid2file(dpdy, "../RL_NSE/outputs/dpdy_final.csv");
-//    grid2file(RHS, "../RL_NSE/outputs/RHS_final.csv");
 }

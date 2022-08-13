@@ -4,7 +4,7 @@
 #include "input_output.h"
 using namespace std;
 
-//No-Slip condition applied to two Grid type objects
+// No-Slip boundary condition sets or averages given boundaries to zero
 void bc_noslip(Grid &u, Grid &v, int bc[4])
 {
     if(bc[0] == 0) // bc[0] = upper boundary
@@ -53,7 +53,7 @@ void bc_noslip(Grid &u, Grid &v, int bc[4])
     }
 }
 
-// Outflow condition applied to two Grid type objects
+// Outflow boundary condition sets or averages the acceleration at the given boundaries to zero
 void bc_outflow(Grid &u, Grid &v, int bc[4])
 {
     if(bc[0] == 1) // bc[0] = upper boundary
@@ -102,7 +102,7 @@ void bc_outflow(Grid &u, Grid &v, int bc[4])
     }
 }
 
-// Inflow condition applied to two Grid type objects given the inflow velocities
+// Inflow boundary condition sets or averages to inflow at the given boundries to given a given inflow velocity
 void bc_inflow(Grid &u, Grid &v, float u_in, float v_in, int bc[4])
 {
     if(bc[0] == 2) // bc[0] = upper boundary
@@ -151,6 +151,7 @@ void bc_inflow(Grid &u, Grid &v, float u_in, float v_in, int bc[4])
     }
 }
 
+// Apply boundary conditons to u and v by calling the functions for no-slip, outflow and inflow for the assigned boundaries
 void set_boundaries(Grid &u, Grid &v, float u_in, float v_in, int bc[4])
 {
     bc_noslip(u, v, bc);
@@ -158,22 +159,7 @@ void set_boundaries(Grid &u, Grid &v, float u_in, float v_in, int bc[4])
     bc_outflow(u, v, bc);
 }
 
-//void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string filename)
-//{
-//    file2grid(shape, "../RL_NSE/shapes/"+filename);
-//    for (int i = 0; i < i_max; i++)
-//    {
-//        for (int j = 0; j < j_max; j++)
-//        {
-//            if(shape.grid[i][j] != 0)
-//            {
-//                u.grid[i][j] = -u.grid[i+1][j];
-//                v.grid[i][j] = -v.grid[i][j+1];
-//            }
-//        }
-//    }
-//}
-
+// Loading obstacle, applying no-slip boundary condition and setting velocity inside to zero
 void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string filename)
 {
     file2grid(shape, "../RL_NSE/shapes/"+filename);
@@ -236,6 +222,7 @@ void bc_shape_in_box(Grid &shape, Grid &u, Grid &v, int i_max, int j_max, string
     }
 }
 
+// Periodically vary inflow velocity with cos(t)
 void inflow_change(float &u_in_c, float &v_in_c, float u_in, float v_in, float t)
 {
     u_in_c = u_in*cos(t);

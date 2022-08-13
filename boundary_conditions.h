@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Grid.h"
+using namespace std;
 void bc_noslip(Grid &u, Grid &v, int bc[4]);
 void bc_outflow(Grid &u, Grid &v, int bc[4]);
 void bc_inflow(Grid &u, Grid &v, float u_in, float v_in, int bc[4]);

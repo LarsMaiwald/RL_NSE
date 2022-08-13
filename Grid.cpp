@@ -2,6 +2,7 @@
 #include <iostream>
 using namespace std;
 
+// Custom class for 2d array
 Grid::Grid(int i, int j, int i_ghost, int j_ghost)
 {
     i_max = i;
@@ -21,6 +22,7 @@ Grid::Grid(int i, int j, int i_ghost, int j_ghost)
     grid = u;
 }
 
+// Grid class destructor
 Grid::~Grid()
 {
     for(int i=0; i < i_max + i_g; i++)
@@ -30,7 +32,8 @@ Grid::~Grid()
     delete [] grid;
 }
 
-void Grid::print() // Do we want to print the ghost cells?
+// Printing the grid to the console (unused)
+void Grid::print()
 {
     for (int j = 0; j < j_max + j_g; j++) {
         for (int i = 0; i < i_max + i_g; i++) {

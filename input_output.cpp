@@ -68,7 +68,7 @@ int load_config(float &a, float &b, int &i_max, int &j_max, float &u_in, float &
     return(EXIT_SUCCESS);
 }
 
-// Writing grid to file
+// Writing grid to .csv file
 void grid2file(Grid &u, string filename)
 {
     ofstream file (filename);
@@ -91,6 +91,7 @@ void grid2file(Grid &u, string filename)
     // csv = np.genfromtxt ('u.csv', delimiter=",")
 }
 
+// Append current simulation time to .csv file
 void time2file(float t, string filename)
 {
     ofstream file (filename, std::ios_base::app);
@@ -102,6 +103,7 @@ void time2file(float t, string filename)
     else cout << "Unable to open file" << filename << "\n";
 }
 
+// Load .csv file to a Grid class object
 void file2grid(Grid &u, string filename)
 {
     int c_i = 0;
