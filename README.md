@@ -6,7 +6,7 @@ This is a numerical solver for the Navier stokes equation in a rectangular domai
 This code was developed as part of the Research Lab module in the M.Sc. Physik at the FSU Jena and is based on a manual by Prof. Bernd Brügmann.
 
 ## Requirements
-
+	
 	- python 3 with libraries numpy, matplolib, os, io, libconf, imageio, localreg
 	- c++ compiler and cmake
 
