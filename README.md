@@ -1,34 +1,50 @@
-# Research Lab: Numerical Solution of the Navier-Stokes Equations
+# Research Lab: Numerical Solution of the Navier-Stokes Equations (NSE)
 
-## Implementation
-Implement the algorithm in the following steps:
-- [x] Write the skeleton of the program, which allocates all needed variables and fields, and initializes the fields to zero.
-- [x] Implement an output routine for the fields. Initialize u and v with a known function (e.g. u = cos(x) cos(y)) and test the output routine by outputting and plotting the fields.
-- [ ] Write the function that computes F and G. To do this, you must implement the derivative stencils (32) through (37). Test the derivative stencils by using them to calculate the derivative of a known function.
-- [ ] Implement the pressure calculation using the SOR method. Test this by solving an elliptic equation to which you know the analytic solution. Output your numerical solution and compare it to the analytic solution. Test the method, its convergence and convergence speed for different grid resolutions and relaxation parameters ω.
-- [ ] Implement a function to compute the RHS of (41).
-- [ ] Lastly, write the time evolution loop. For this, you need a function to set the time step according to the stability criterion. Be careful to potentially absorb a division by zero. You also need to implement the function which computes the new velocity from the new values of F and G and from the new pressure values.
+## The program
 
-## Algorithm
-The following lists all necessary steps for solving the Navier-Stokes equations in the correct order:
-- [x] Read in parameters and initialize all variables.
-- [ ] Allocate memory for all fields and initialize all fields.
-- [ ] Start of the time evolution loop.
-- [x] Choose time step δt according to stability condition (26).
-- [ ] Fill ghost cells according to boundary conditions.
-- [ ] Compute F(n) and G(n) according to (29) and (30).
-- [ ] Calculate the RHS of the pressure equation (40).
-- [ ] Start of the SOR iteration loop.
-  - [ ] Calculate the pressure for all cells according to (42).
-  - [ ] Compute the residual (43) and its norm.
-  - [ ] If the norm of the residual is small enough, stop the iteration.
-- [ ] Compute the new velocity components u(n+1) and v(n+1) according to (21) and (22).
-- [ ] Output the relevant fields.
+This is a numerical solver for the Navier stokes equation in a rectangular domain [0,a]x[0,b]. The numerical solver uses staggered grids and the SOR-relaxation scheme.
 
-## Questions
-- [x] Which are the lowest and highest value for the indices i and j of u and v?
-    - u: (i_max+1)x(j_max+2)
-    - v: (i_max+2)x(j_max+1)
-    - p: (i_max+2)x(j_max+2)
-- [ ] Aren't there ghost cells missing for u in x direction and for v in y direction?
-- [ ] Does |u_max| really mean abs(max(u))?
+## Requirements
+
+	- python with matplotlib and numpy module installed
+	- a c++ compiler and cmake
+
+## Usage
+
+	- choose required parameters in config.cfg
+		- simulation domain
+			- a // length of domain edge in x-direction
+			- b // length of domain edge y-direction 
+			- i_max // number of cells in x-direction
+			- j_max // number of cells in y-direction
+
+		- boundary conditions (0 --> No-Slip condition, 1 --> Outflow condition, 2 --> Inflow condition)
+			- bc0 // bc for north edge
+			- bc1 // bc for west edge
+			- bc2 // bc for south edge
+			- bc3 // bc for east edge
+
+		// boundary condition parameters
+		u_in = 1.0; // inflow velocity in x-direction (i-axis)
+		v_in = 0.0; // inflow velocitiy in y-direction (j-axis)
+
+		// additional parameters
+		Re = 7500.0; // Reynolds number
+		tau = 0.1; // safety factor for time stepping
+		g_x = 0.0; // acceleration in x-direction due to gravitiy
+		g_y = 0.0; // acceleration in y-direction due to gravitiy
+		w = 1.2; // SOR relaxation factor (w \in (1,2])
+		eps = 0.5; // error tolerance factor
+		norm = 0; // error tolerence norm, 0 --> max_norm, 1 --> L2_norm
+		pre = 0.1; // (1 + pre) is the prefactor when computing gamma
+		t_final = 100.0; // time for the system to evolve
+		chi = 0.3; // error tolerance shift from 0 (higher value needed when working with orthogonal inflow --> 0.15, otherwise 0.05 should work)
+		save_step = 1200; // step between saved files
+		shape_in_box = 0; // 0 --> no shape in box, 1 --> shape 1, 2 --> shape 2, …
+		in_c = 0; // periodically change inflow velocity using cosine factor
+		lsl = 0.1; // lower speed limit in plotting lsl*speed_mean (all smaller velocities are set to zero)
+		SOR_max_iter = 1e1; // code exits when SOR takes longer than SOR_iter/(i_max*j_max) iterations
+		fix_color = 0; // 1 --> keep colorbars fixed, 0 --> adjust colorbars with every frame
+		output_num=0; // add number to folder (standard is 0 and this folder will be created by ./run if other ouput folder are required please make the directory before running)
+
+	- run ./run in a terminal or try to run the file as administrator from your GUI
