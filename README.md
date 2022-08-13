@@ -24,27 +24,28 @@ This is a numerical solver for the Navier stokes equation in a rectangular domai
 			- bc2 // bc for south edge
 			- bc3 // bc for east edge
 
+		
 		// boundary condition parameters
-		u_in = 1.0; // inflow velocity in x-direction (i-axis)
-		v_in = 0.0; // inflow velocitiy in y-direction (j-axis)
+		u_in = 1.0; // inflow velocity in x-direction (i-axis) // float
+		v_in = 0.0; // inflow velocitiy in y-direction (j-axis) // float
 
 		// additional parameters
-		Re = 7500.0; // Reynolds number
-		tau = 0.1; // safety factor for time stepping
-		g_x = 0.0; // acceleration in x-direction due to gravitiy
-		g_y = 0.0; // acceleration in y-direction due to gravitiy
-		w = 1.2; // SOR relaxation factor (w \in (1,2])
-		eps = 0.5; // error tolerance factor
-		norm = 0; // error tolerence norm, 0 --> max_norm, 1 --> L2_norm
-		pre = 0.1; // (1 + pre) is the prefactor when computing gamma
-		t_final = 100.0; // time for the system to evolve
-		chi = 0.3; // error tolerance shift from 0 (higher value needed when working with orthogonal inflow --> 0.15, otherwise 0.05 should work)
-		save_step = 1200; // step between saved files
-		shape_in_box = 0; // 0 --> no shape in box, 1 --> shape 1, 2 --> shape 2, …
-		in_c = 0; // periodically change inflow velocity using cosine factor
-		lsl = 0.1; // lower speed limit in plotting lsl*speed_mean (all smaller velocities are set to zero)
-		SOR_max_iter = 1e1; // code exits when SOR takes longer than SOR_iter/(i_max*j_max) iterations
-		fix_color = 0; // 1 --> keep colorbars fixed, 0 --> adjust colorbars with every frame
-		output_num=0; // add number to folder (standard is 0 and this folder will be created by ./run if other ouput folder are required please make the directory before running)
+		Re = 1e3; // Reynolds number // float
+		tau = 0.5; // safety factor for time stepping (in 0 to 1) // float
+		g_x = 0.0; // acceleration in x-direction due to gravitiy // float
+		g_y = 9.801; // acceleration in y-direction due to gravitiy // float
+		w = 1.2; // SOR relaxation factor (w \in (1,2]) // flaot
+		eps = 0.1; // error tolerance factor // float
+		norm = 0; // error tolerence norm, 0 --> max_norm, 1 --> L2_norm // int
+		pre = 0.1; // (1 + pre) is the prefactor when computing gamma // float
+		t_final = 50.0; // time for the system to evolve // float
+		chi = 0.08; // error tolerance shift from 0 // flaot
+		save_step = 200; // step between saved files // int
+		shape_in_box = 0; // 0 --> no shape in box, 1 --> sphere, 2 --> airfoil // int
+		in_c = 0; // periodically change inflow velocity using cosine factor (0 --> False, 1 --> True) // int
+		lsl = 0; // lower speed limit in plotting lsl*speed_mean (all velocities closer to zero are set to zero) // float
+		SOR_max_iter = 1e1; // code exits when SOR takes longer than int(SOR_iter*i_max*j_max) iterations // float
+		fix_color = 0; // 1 --> keep colorbars fixed, 0 --> adjust colorbars with every frame // int
+		output_num = 0; // number added to the output folder and streamplot/streamanimation (Attention: If output_num is not 0 the folder needs to be created manually.) // int
 
 	- run ./run in a terminal or try to run the file as administrator from your GUI
