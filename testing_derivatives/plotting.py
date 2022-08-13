@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from load_cfg import load_cfg
 import sympy as sy
 import os
+from tqdm import tqdm
+from matplotlib.colors import Normalize
+import matplotlib.cm as cm
 
 # loading parameter file
 cfg = load_cfg('../testing_derivatives/config.cfg')
@@ -13,7 +16,7 @@ x_max = cfg.x_max
 y_min = cfg.y_min
 y_max = cfg.y_max
 
-# loading arrays
+# loading arrays calculated in C++
 u = np.genfromtxt ('../testing_derivatives/outputs/u.csv', delimiter=",")
 v = np.genfromtxt ('../testing_derivatives/outputs/v.csv', delimiter=",")
 d2udx2 = np.genfromtxt ('../testing_derivatives/outputs/d2udx2.csv', delimiter=",")
@@ -27,10 +30,10 @@ dv2dy = np.genfromtxt ('../testing_derivatives/outputs/dv2dy.csv', delimiter=","
 x = np.genfromtxt ('../testing_derivatives/outputs/x.csv', delimiter=",")
 y = np.genfromtxt ('../testing_derivatives/outputs/y.csv', delimiter=",")
 
-#put into Array for Plotting
+# put into Array for Plotting
 numRes_Arr = [u, v, d2udx2, d2udy2, d2vdx2, d2vdy2, du2dx, dv2dy, duvdx, duvdy]
 
-#calculate analytical derivative using sympy
+# calculate analytical derivative using sympy
 X = sy.symbols('X')
 Y = sy.symbols('Y')
 U = 2*sy.cos(X)+ 3*sy.sin(Y)
@@ -44,11 +47,12 @@ D2VDY2 = sy.diff(V, Y, Y)
 DUVDX = sy.diff(U*V, X)
 DV2DY = sy.diff(V**2, Y)
 
-#put into Array for Plotting
+# put into Array for Plotting
 analytRes_Arr_temp = [U, V, D2UDX2, D2UDY2, D2VDX2, D2VDY2, DU2DX, DV2DY, DUVDX, DUVDY]
 analytRes_Arr = []
 strRes_Arr = [r'$u$', r'$v$', r'$\frac{\partial^2 u}{\partial x^2}$', r'$\frac{\partial^2 u}{\partial y^2}$', r'$\frac{\partial^2 v}{\partial x^2}$', r'$\frac{\partial^2 v}{\partial y^2}$', r'$\frac{\partial u^2}{\partial x}$', r'$\frac{\partial v^2}{\partial y}$', r'$\frac{\partial uv}{\partial x}$', r'$\frac{\partial uv}{\partial y}$']
-#turn sympy expressions into callable functions
+
+# turn sympy expressions into callable functions
 for k in range(len(analytRes_Arr_temp)):
     analytRes_Arr_temp[k] = sy.lambdify([X,Y], analytRes_Arr_temp[k], "numpy")
     temp = np.zeros((len(x), len(y)))
@@ -57,35 +61,40 @@ for k in range(len(analytRes_Arr_temp)):
             temp[i,j] = analytRes_Arr_temp[k](x[i], y[j])
     analytRes_Arr.append(temp)
 
-
+# set path for saving plots
 outpath = "../testing_derivatives/plots"
 
+# initialize figure
 fig, ax = plt.subplots(1, 2, figsize= (9, 3.5))        # generate figure with axes
 bax = ax[0].inset_axes([1.1, 0, 0.05, 1], transform=ax[0].transAxes)
 bax.axis('off')
 cax = ax[1].inset_axes([1.1, 0, 0.05, 1], transform=ax[1].transAxes) # Colorbar is held by
-im = ax[0].pcolormesh(x, y, numRes_Arr[0])    # initialize plot
-im = ax[1].pcolormesh(x, y, analytRes_Arr[0])
-ax[0].set_title('Numerical solution')
-ax[1].set_title('Analytical solution')
-for i in range(2):
-    ax[i].set_xlabel('x')
-    ax[i].set_ylabel('y')
-fig.suptitle(strRes_Arr[0], fontsize=15)
-cb = fig.colorbar(im, ax=ax, cax=cax)
-plt.tight_layout()
-plt.draw()
-fig.savefig(os.path.join(outpath,"comparison_0.png"))
 
+for i in tqdm(range(0, len(numRes_Arr))):
 
-for i in range(1, len(numRes_Arr)):
+    # calculate max and min for colormap nomalization
     cax.clear()
-    im = ax[0].pcolormesh(x, y, numRes_Arr[i])
-    im = ax[1].pcolormesh(x, y, analytRes_Arr[i])
+    maxArr = []
+    maxArr.append(np.amax(numRes_Arr[i]))
+    maxArr.append(np.amax(analytRes_Arr[i]))
+    minArr = []
+    minArr.append(np.amin(numRes_Arr[i]))
+    minArr.append(np.amin(analytRes_Arr[i]))
+    cbmax = max(maxArr)
+    cbmin = min(minArr)
+
+    normalizer=Normalize(cbmin,cbmax)
+    im=cm.ScalarMappable(norm=normalizer)
+
+    # drawing of colormesh-plots
+    ax[0].pcolormesh(x, y, numRes_Arr[i], norm=normalizer)
+    ax[1].pcolormesh(x, y, analytRes_Arr[i], norm=normalizer)
     ax[0].set_title('Numerical solution')
     ax[1].set_title('Analytical solution')
     fig.suptitle(strRes_Arr[i], fontsize=14)
     cb = fig.colorbar(im, ax=ax, cax=cax)
     plt.tight_layout()
     plt.draw()
+
+    # saving the figure as png
     fig.savefig(os.path.join(outpath,"comparison_{0}.png".format(i)), dpi=200)

@@ -78,3 +78,9 @@ cmake_install.cmake
 Literature
 plots
 outputs
+Tex_Project
+result_folder_rudi
+outputs0
+outputs1
+outputs2
+outputs3
