@@ -7,7 +7,6 @@
 #include "time_stepping.h"
 #include "pressure_calculation.h"
 #include "boundary_conditions.h"
-
 using namespace std;
 
 int main()
