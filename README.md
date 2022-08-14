@@ -52,3 +52,6 @@ This code was developed as part of the Research Lab module in the M.Sc. Physik a
     - cleans outputs0 folder
     - runs the C++ program
     - runs python programs creating the animation
+
+## Results
+The results folder contains simulations for a variety of systems. In each case animations of the time evolution with fixed and dynamic colorbars, a streamplot of the final state, the output files of the final state and the config file for the simulation are available. The output folder does not contain any time-steps beside the final state to reduce the needed storage size.
